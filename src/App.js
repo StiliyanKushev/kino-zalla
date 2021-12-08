@@ -1,5 +1,6 @@
 import './App.css';
 
+import Header from './components/Header/Header';
 import MainContent from './components/MainContent/MainContent';
 import SideMenu from './components/SideMenu/SideMenu';
 
@@ -8,7 +9,10 @@ function App() {
         <>
             {/* <BlurOverlay/> */}
             <SideMenu/>
-            <MainContent/>
+            <main>
+                <Header/>
+                <MainContent/>
+            </main>
         </>
     );
 }

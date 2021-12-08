@@ -1,0 +1,125 @@
+.recomended {
+    height: calc(100% - (1.3rem) * 2);
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    width: calc(100% - 4rem);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.recomended h2{
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 1.7rem;
+}
+
+.recomended .banner-image {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 83.85%), url(../../assets/spiderman-banner.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 0;
+    padding-top: 66.64%;
+    border-radius: 0.6vw;
+}
+
+.preview-section.dummy {
+    position: relative;
+    visibility: hidden;
+}
+
+.preview-section {
+    opacity: 0.1;
+    width: 100%;
+    position: absolute;
+    height: fit-content;
+}
+
+.recomended .preview-image {
+    width: 48%;
+    border-radius: 0.6vw;
+}
+
+.recomended .controls button {
+    cursor: pointer;
+    margin-left: 5%;
+    padding: 0.76rem 0.8rem;
+    border-radius: 0.55vw;
+    outline: none;
+    border: none;
+    width: 33%;
+    font-weight: bold;
+    font-size: 1rem;
+    background: white;
+    margin-top: 5%;
+}
+
+.recomended .bottom-holder {
+    display: flex;
+    margin-top: -31%;
+    position: relative;
+    width: 69%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.recomended .placeholder {
+    overflow: hidden;
+    display: flex;
+    position: relative;
+}
+
+.recomended .pages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding-top: 5%;
+}
+
+.recomended .pages li.selected {
+    background-color: white;
+    position: absolute;
+}
+
+.recomended .pages li {
+    width: 1.2vw;
+    height: 1.2vw;
+    border-radius: 1.2vw;
+    background-color: #7C7C7C;
+    margin-left: .8vw;
+    cursor: pointer;
+}
+
+.recomended .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottom-holder div {
+    font-family: 'Ropa Sans', 'Roboto', sans-serif;
+    width: 100%;
+    position: absolute;
+    margin-left: 58%;
+}
+
+.bottom-holder .duration {
+    font-size: 1.4rem;
+    color: #C7C7C7;
+    margin-top: 0.7rem;
+}
+
+.bottom-holder .title {
+    font-size: 1.8rem;
+    width: 78%;
+    margin-top: 6rem;
+}
+
+.relative-holder {
+    top: -25%;
+    position: relative;
+}

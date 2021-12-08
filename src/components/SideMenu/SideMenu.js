@@ -5,7 +5,7 @@ import SearchBar from '../SearchBar/SearchBar';
 
 function SideMenu() {
     return (
-        <div class="side-menu">
+        <div className="side-menu">
             <SearchBar />
             <Recommendations />
         </div>

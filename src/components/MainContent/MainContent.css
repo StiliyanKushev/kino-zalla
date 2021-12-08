@@ -1,0 +1,44 @@
+main {
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: stretch;
+}
+
+main header form select {
+    cursor: pointer;
+    outline: none;
+    margin-right: 1.2rem;
+    background: white;
+    padding: 0.55rem 0.8rem;
+    border: none;
+    border-radius: 0.33vw;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+main .films-holder .row {
+    display: flex;
+    margin-top: 2.5vw;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-content {
+    height: calc(100% - 5vw);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media screen and (max-width: 1920px) and (max-height:960px) {
+    main .films-holder .banner {
+        padding-top: 125% !important;
+    }
+}
+
+@media screen and (min-width: 1921px) and (max-height:1300px) {
+    main .films-holder .banner {
+        padding-top: 125% !important;
+    }
+}

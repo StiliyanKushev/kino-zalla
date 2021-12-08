@@ -1,0 +1,11 @@
+.arrow_down {
+    background: url(../../assets/drop-down-arrow.png) no-repeat right white;
+    background-position: calc(100% - 0.77vw) 1vw, calc(100% - 1vw) 1vw, 100% 0;
+    background-size: 0.64vw 0.4vw, 7px 5px, 2.5em 2.5em;
+}
+
+.arrow_up {
+    background: url(../../assets/drop-down-arrow-rotated.png) no-repeat right white;
+    background-position: calc(100% - 0.77vw) 1vw, calc(100% - 1vw) 1vw, 100% 0;
+    background-size: 0.64vw 0.4vw, 7px 5px, 2.5em 2.5em;
+}

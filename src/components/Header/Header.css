@@ -1,0 +1,14 @@
+main header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+main form {
+    width: fit-content;
+}
+
+main header .fas {
+    font-size: 1.45rem;
+    cursor: pointer;
+}

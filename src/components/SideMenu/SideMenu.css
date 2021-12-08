@@ -1,0 +1,5 @@
+.side-menu {
+    width: calc(47% + 4rem);
+    padding-right: 4rem;
+    position:relative;
+}

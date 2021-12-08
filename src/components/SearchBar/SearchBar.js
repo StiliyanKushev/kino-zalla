@@ -2,9 +2,10 @@ import './SearchBar.css';
 
 function SearchBar() {
     return (
-        <>
-            SearchBar
-        </>
+        <form className="search">
+            <input type="text" placeholder="Търси филми..." />
+            <i className="fas fa-search"></i>
+        </form>
     );
 }
 

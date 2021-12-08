@@ -11,11 +11,11 @@
  html {
     height: 100vh;
 }
-body {
+body, #root {
     height: 100%;
 }
 
-html, body, * {
+html, body, *, #root {
     box-sizing: border-box !important;
     outline: none;
     text-decoration: none;
@@ -42,7 +42,7 @@ input::placeholder {
    * Remove the margin in all browsers.
    */
   
-  body {
+  body, #root {
     margin: 0;
   }
   

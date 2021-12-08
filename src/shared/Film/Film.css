@@ -1,0 +1,49 @@
+main .films-holder .film {
+    width: 10.3vw;
+}
+
+main .films-holder .banner {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 66.15%, #000000 100%), url(../../assets/the\ office.jpg);
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    width: 100%;
+    height: 0;
+    padding-top: 145%;
+    cursor: pointer;
+}
+
+main .films-holder .banner .fa-star {
+    font-size: 1.3vw;
+    position: relative;
+    top: -2.8vw;
+    margin-left: .4vw;
+    color: #E7C200;
+    cursor: pointer;
+}
+
+main .films-holder .banner .fa-play-circle {
+    font-size: 1.8vw;
+    position: relative;
+    top: -2.7vw;
+    margin-left: .4vw;
+    right: -5.7vw;
+    filter: drop-shadow(0 0 0.4rem black);
+    background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(rgba(255, 255, 255, 0.67)));
+    -webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+    cursor: pointer;
+}
+
+main .films-holder .title {
+    text-align: center;
+    margin-top: 1vh;
+    font-size: 1.1vw;
+}
+
+main .films-holder .duration {
+    text-align: center;
+    margin-top: .3vh;
+    font-size: 1.1vw;
+    color: #C7C7C7;
+    font-family: 'Ropa Sans', 'Roboto', sans-serif;
+}

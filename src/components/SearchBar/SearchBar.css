@@ -1,0 +1,26 @@
+.side-menu .search {
+    z-index: 10;
+    position: relative;
+    background: white;
+    padding: 0.55rem 0.8rem;
+    border-radius: 0.33vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.side-menu .search input {
+    background: none;
+    border: none; 
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: stretch;
+}
+
+.side-menu .search .fas {
+    color: black;
+    width: 1.4vw;
+    margin-left: 1.2vw;
+    font-size: .8rem;
+    cursor: pointer;
+}
