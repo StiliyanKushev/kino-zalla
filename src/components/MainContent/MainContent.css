@@ -31,6 +31,38 @@ main .films-holder .row {
     justify-content: center;
 }
 
+.response {
+    position: absolute;
+    width: 61.5%;
+}
+
+.response .row {
+    visibility: hidden;
+}
+
+.response-box {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+}
+
+.response-box>div,
+.response-box img {
+    width: 50%;
+}
+
+.response-box>div h2 {
+    font-size: 3rem;
+}
+
+.response-box>div h3 {
+    font-size: 1.4rem;
+}
+
 @media screen and (max-width: 1920px) and (max-height:960px) {
     main .films-holder .banner {
         padding-top: 125% !important;

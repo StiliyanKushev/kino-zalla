@@ -3,7 +3,7 @@ main .films-holder .film {
 }
 
 main .films-holder .banner {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 66.15%, #000000 100%), url(../../assets/the\ office.jpg);
+    /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 66.15%, #000000 100%), url(../../assets/the\ office.jpg); */
     background-size: cover !important;
     background-repeat: no-repeat !important;
     width: 100%;

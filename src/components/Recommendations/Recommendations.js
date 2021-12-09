@@ -118,8 +118,8 @@ function initializeSlideshow(){
     }
 
     const _control = (i, el) => {
-        $(el).on('click', function(){
-            // cannot click when animation is running 
+        $(el).on('animation click', function(event){
+            // cannot click when animation is running
             if($('.relative-holder .selected').data('anim')) return;
 
             let lis = $('.pages>li').get();
@@ -146,6 +146,22 @@ function initializeSlideshow(){
         });
     }
 
+    let getInterval = () => setInterval(() => {
+        let lis = $('.pages>li').get();
+        for(let i = 0; i < lis.length; i++){
+            if($(lis[i]).data('current')){
+                if(i === lis.length - 1){
+                    $(lis[0]).trigger('animation');
+                }
+                else {
+                    $(lis[i + 1]).trigger('animation');
+                }
+                break;
+            }
+        }
+    }, 8000);
+    let interval = getInterval();
+
     $('.preview-section.real').each(function (index) {
         _position(index, this);
         _opacity(index, this);
@@ -159,20 +175,10 @@ function initializeSlideshow(){
         $(this).data('current', index === 0 ? true : false);
     });
 
-    setInterval(() => {
-        let lis = $('.pages>li').get();
-        for(let i = 0; i < lis.length; i++){
-            if($(lis[i]).data('current')){
-                if(i === lis.length - 1){
-                    $(lis[0]).trigger('click');
-                }
-                else {
-                    $(lis[i + 1]).trigger('click');
-                }
-                break;
-            }
-        }
-    }, 8000);
+    $('.pages').on('click', (e) => {
+        clearInterval(interval);
+        interval = getInterval();
+    });
 }
 
 function sectionSlide(direction= -1){
