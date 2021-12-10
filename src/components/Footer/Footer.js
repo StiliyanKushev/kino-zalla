@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 import { SearchContext } from '../../contexts/Search/provider';
+import SystemInfo from '../SystemInfo/SystemInfo';
 
 function Footer() {
     const maxLength = 5;
@@ -161,7 +162,7 @@ function Footer() {
                     </>)
                 }
             </ul>
-            <p className="system-information">Intel Core i7 8700 80% 5.3GB/16GB 320GB/2TB 23h 15min</p>
+            <SystemInfo />
         </div>
     );
 }
