@@ -15,6 +15,6 @@ systemRouter.get('/info', async function (req, res) {
     let osInfo = await osu.os.oos();
     result += `OS: ${osInfo} `;
     res.json({ data: result })
-})
+});
 
-module.exports = systemRouter
+module.exports = systemRouter;

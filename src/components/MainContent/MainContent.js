@@ -8,12 +8,11 @@ import {
 } from 'react';
 
 import loadingAsset from '../../assets/loading.gif';
+import {
+    baseUrl,
+    imdbFetch,
+} from '../../config';
 import { SearchContext } from '../../contexts/Search/provider';
-// import {
-//     apiKey,
-//     baseUrl,
-// } from '../../config';
-import dummy from '../../dummy_mosPopular.json';
 import Film from '../../shared/Film/Film';
 import Footer from '../Footer/Footer';
 
@@ -26,10 +25,9 @@ function MainContent() {
     // on mount
     useEffect(() => {
         // get top 250 movies
-        // fetch(`${baseUrl}/MostPopularMovies/${apiKey}`).then(res => res.json()).then(res => {
-        //     dispatch({ type: 'save_top', data: res.items });
-        // })
-        dispatch({ type: 'save_top', data: dummy.items });
+        imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
+            dispatch({ type: 'save_top', data: res.items });
+        })
     }, [dispatch]);
 
     useEffect(() => {

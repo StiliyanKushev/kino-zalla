@@ -3,8 +3,8 @@ import './Header.css';
 import { useContext } from 'react';
 
 import {
-    apiKey,
     baseUrl,
+    imdbFetch,
 } from '../../config';
 import { SearchContext } from '../../contexts/Search/provider';
 import Select from '../../shared/Select/Select';
@@ -20,7 +20,7 @@ function Header() {
 
     const handlePopular = e => {
         e.preventDefault();
-        fetch(`${baseUrl}/MostPopularMovies/${apiKey}`).then(res => res.json()).then(res => {
+        imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
             dispatch({ type: 'save_top', data: res.items });
         });
@@ -28,7 +28,7 @@ function Header() {
 
     const handleTop250 = e => {
         e.preventDefault();
-        fetch(`${baseUrl}/Top250Movies/${apiKey}`).then(res => res.json()).then(res => {
+        imdbFetch(`${baseUrl}/Top250Movies/$KEY`).then(res => {
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
             dispatch({ type: 'save_top', data: res.items });
         })
@@ -36,7 +36,7 @@ function Header() {
     
     const handleInTheaters = e => {
         e.preventDefault();
-        fetch(`${baseUrl}/InTheaters/${apiKey}`).then(res => res.json()).then(res => {
+        imdbFetch(`${baseUrl}/InTheaters/$KEY`).then(res => {
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
             dispatch({ type: 'save_top', data: res.items });
         })

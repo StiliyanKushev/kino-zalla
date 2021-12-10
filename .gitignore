@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# file that contains my list of api keys
+./src/apiKeys.js
+
 # testing
 /coverage
 
