@@ -11,6 +11,7 @@
 
 .footer .page-indexer li {
     margin-right: .8rem;
+    user-select: none;
 }
 
 .footer .page-indexer li:not(.dots) {

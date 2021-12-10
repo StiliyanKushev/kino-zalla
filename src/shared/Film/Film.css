@@ -1,15 +1,21 @@
 main .films-holder .film {
     width: 10.3vw;
+    align-self: flex-start;
+}
+
+main .films-holder .film.hidden {
+    opacity: 0%;
 }
 
 main .films-holder .banner {
     /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 66.15%, #000000 100%), url(../../assets/the\ office.jpg); */
-    background-size: cover !important;
+    background-size: contain !important;
     background-repeat: no-repeat !important;
     width: 100%;
     height: 0;
     padding-top: 145%;
     cursor: pointer;
+    background-position-y: -6px !important;
 }
 
 main .films-holder .banner .fa-star {
@@ -35,9 +41,16 @@ main .films-holder .banner .fa-play-circle {
 }
 
 main .films-holder .title {
+    display: block;
+    display: -webkit-box;
     text-align: center;
     margin-top: 1vh;
     font-size: 1.1vw;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    -webkit-line-clamp: 2 !important;
+    text-overflow: ellipsis;
+    /* height: calc(1.1vw * 1.15 * 2); */
 }
 
 main .films-holder .duration {

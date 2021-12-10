@@ -4,30 +4,69 @@ import {
     memo,
     useContext,
     useEffect,
+    useState,
 } from 'react';
 
 import loadingAsset from '../../assets/loading.gif';
+import {
+    apiKey,
+    baseUrl,
+} from '../../config';
 import { SearchContext } from '../../contexts/Search/provider';
-import dummy_top250 from '../../dummy_top250.json';
 import Film from '../../shared/Film/Film';
 import Footer from '../Footer/Footer';
 
 function MainContent() {
+    const pageFilmsCount = 10;
     const [ state, dispatch ] = useContext(SearchContext);
+    const [ pageItems, setPageItems ] = useState([]);
+    const [ elements, setElements ] = useState([]);
 
     // on mount
     useEffect(() => {
         // get top 250 movies
-        // fetch(`${baseUrl}/Top250Movies/${apiKey}`).then(res => res.json()).then(res => {
-        //     console.log(res);
-        // })
-
-        console.log(dummy_top250);
-        dispatch({ type: 'save_top', data: dummy_top250.items });
+        fetch(`${baseUrl}/MostPopularMovies/${apiKey}`).then(res => res.json()).then(res => {
+            dispatch({ type: 'save_top', data: res.items });
+        })
+        //dispatch({ type: 'save_top', data: dummy.items });
     }, [dispatch]);
 
+    useEffect(() => {
+        if(state.filters) return; // don't use "top 250" data
+        let items = [];
+        for(let i = 0; i < pageFilmsCount; i++)
+        items.push(state.top[(state.pageIndex * pageFilmsCount) + i]);
+        setPageItems(items);
+    }, [state.top, state.filters, state.pageIndex, dispatch])
+
+
+    // dynamically generate the rows based on page index
+    useEffect(() => {
+        // items are not loaded
+        if(!pageItems[0]) return;
+
+        let topItems = [];
+        let bottomItems = [];
+        pageItems.forEach((value, index) => {
+            let filmElement = 
+            <Film 
+                key={ index }
+                data={ value || {} }
+            />
+            // first row
+            if(index < 5) topItems.push(filmElement);
+            // second row
+            else bottomItems.push(filmElement);
+        });
+        let newElements = [];
+        newElements.push(<div key='1' className="row">{ topItems }</div>);
+        newElements.push(<div key='2' className="row">{ bottomItems }</div>);
+
+        setElements(newElements);
+    }, [pageItems])
+
     return (
-        <div className={`main-content ${state.searching && 'response'}`}>
+        <div className={`main-content ${state.searching ? 'response' : ''}`}>
             {
                 state.searching && (<>
                     <div className="response-box">
@@ -37,27 +76,12 @@ function MainContent() {
             }
             <div className="films-holder">
                 {
-                    !state.searching ? (<>
+                    !state.searching ? (<>{ elements }</>) : (<>
                         <div className="row">
-                            <Film/>
-                            <Film/>
-                            <Film/>
-                            <Film/>
-                            <Film/>
+                            <Film data={{}} />
                         </div>
                         <div className="row">
-                            <Film/>
-                            <Film/>
-                            <Film/>
-                            <Film/>
-                            <Film/>
-                        </div>
-                    </>) : (<>
-                        <div className="row">
-                            <Film url=''/>
-                        </div>
-                        <div className="row">
-                            <Film url=''/>
+                            <Film data={{}} />
                         </div>
                     </>)
                 }

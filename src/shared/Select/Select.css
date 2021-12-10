@@ -9,3 +9,16 @@
     background-position: calc(100% - 0.77vw) 1vw, calc(100% - 1vw) 1vw, 100% 0;
     background-size: 0.64vw 0.4vw, 7px 5px, 2.5em 2.5em;
 }
+
+main header form select {
+    cursor: pointer;
+    outline: none;
+    margin-right: 1.2rem;
+    background: white;
+    padding: 0.55rem 0.8rem;
+    border: none;
+    border-radius: 0.33vw;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}

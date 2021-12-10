@@ -1,5 +1,13 @@
 export const reducer = (state, action) => {
     switch (action.type) {
+        case "set_page": {
+            return {
+                ...state,
+                pageIndex: action.data.index,
+                from: action.data.from,
+                maxPages: action.data.max || state.maxPages
+            }
+        }
         case "save_top":{
             return {
                 ...state,
@@ -26,17 +34,25 @@ export const reducer = (state, action) => {
                 filters: true,
             }
         }
+        case "set_trailer": {
+            return {
+                ...state,
+                trailerLink: action.data
+            }
+        }
         
-        default:
-            return state
+        default: return state
     }
   }
   
-  export const initialState = {
+export const initialState = {
+    trailerLink: '',
     searching: false,
     data: [],
     error: '',
     top: [],
     pageIndex: 0,
+    maxPages: 0,
+    from: '',
     filters: false,
-  }
+}

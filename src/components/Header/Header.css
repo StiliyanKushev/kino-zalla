@@ -12,3 +12,16 @@ main header .fas {
     font-size: 1.45rem;
     cursor: pointer;
 }
+
+.actionBtn {
+    cursor: pointer;
+    outline: none;
+    margin-right: 1.2rem;
+    background: white;
+    padding: 0.55rem 0.8rem;
+    border: none;
+    border-radius: 0.33vw;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}

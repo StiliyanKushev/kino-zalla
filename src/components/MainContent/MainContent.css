@@ -4,22 +4,10 @@ main {
     width: stretch;
 }
 
-main header form select {
-    cursor: pointer;
-    outline: none;
-    margin-right: 1.2rem;
-    background: white;
-    padding: 0.55rem 0.8rem;
-    border: none;
-    border-radius: 0.33vw;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
 main .films-holder .row {
     display: flex;
     margin-top: 2.5vw;
+    height: 18.5vw;
     justify-content: space-between;
     align-items: center;
 }

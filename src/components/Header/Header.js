@@ -1,40 +1,61 @@
 import './Header.css';
 
+import { useContext } from 'react';
+
+import {
+    apiKey,
+    baseUrl,
+} from '../../config';
+import { SearchContext } from '../../contexts/Search/provider';
 import Select from '../../shared/Select/Select';
 
 function Header() {
+    const [ state, dispatch ] = useContext(SearchContext);
+
+    const handleRandom = e => {
+        e.preventDefault();
+        let randomPage = Math.floor(Math.random() * state.maxPages) + 1;
+        dispatch({ type: 'set_page', data: { index: randomPage, from: 'header' } })
+    }
+
+    const handlePopular = e => {
+        e.preventDefault();
+        fetch(`${baseUrl}/MostPopularMovies/${apiKey}`).then(res => res.json()).then(res => {
+            dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
+            dispatch({ type: 'save_top', data: res.items });
+        });
+    }
+
+    const handleTop250 = e => {
+        e.preventDefault();
+        fetch(`${baseUrl}/Top250Movies/${apiKey}`).then(res => res.json()).then(res => {
+            dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
+            dispatch({ type: 'save_top', data: res.items });
+        })
+    }
+    
+    const handleInTheaters = e => {
+        e.preventDefault();
+        fetch(`${baseUrl}/InTheaters/${apiKey}`).then(res => res.json()).then(res => {
+            dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
+            dispatch({ type: 'save_top', data: res.items });
+        })
+    }
+
     return (
         <header>
             <select id="width_tmp_select"><option id="width_tmp_option"></option></select>
             <form>
                 <Select options={[
-                    ['genre', 'Жанр'],
-                    ['sciFi', 'Научна Фантастика'],
-                    ['comedy', 'Комедия'],
-                    ['horror', 'Ужаси'],
-                    ['all', 'Жанр: Всички'],
-                ]}/>
-                <Select options={[
-                    ['year', 'Година'],
-                    ['2021', '2021'],
-                    ['2020', '2020'],
-                    ['2019', '2019'],
-                    ['all', 'Година: Всички'],
-                ]}/>
-                <Select options={[
-                    ['sort-by', 'Сортирай'],
-                    ['rating', 'Рейтинг'],
-                    ['views', 'Гледания'],
-                    ['date-des', 'Дата →'],
-                    ['date-asc', 'Дата ←'],
-                    ['all', 'Сортирай: Всички'],
-                ]}/>
-                <Select options={[
-                    ['other', 'Други настройки'],
+                    ['other', 'Настройки'],
                     ['starred', 'Любими'],
                     ['not-starred', 'Нелюбими'],
                     ['all', 'Всички'],
                 ]}/>
+                <button onClick={ handlePopular } className="actionBtn" >Популярни</button>
+                <button onClick={ handleTop250 } className="actionBtn" >Топ 250</button>
+                <button onClick={ handleInTheaters } className="actionBtn" >В кината</button>
+                <button onClick={ handleRandom } className="actionBtn" >Рандъм</button>
             </form>
             <i className="fas fa-cog"></i>
         </header>
