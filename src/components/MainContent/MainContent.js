@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import loadingAsset from '../../assets/loading.gif';
 import {
@@ -58,15 +59,31 @@ function MainContent() {
         // get popular movies at start
         imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(async res => {
             let allItems = res.items;
-
             // spare the first 6 for the sidebar recomendations
             let recomendations = allItems.splice(0, 6);
             recomendations = await fetchThumbnails(recomendations);
             dispatch({ type: 'save_recomended', data: recomendations });
-
             dispatch({ type: 'save_data', data: allItems });
             dispatch({ type: 'save_popular', data: allItems });
-        }).catch(() => {})
+        }).catch(async () => {
+            // cannot connect to imdb api, use dummy data instead
+            let popularItems = await (await import('../../dummy_mosPopular.json')).items;
+            let topItems = await (await import('../../dummy_top250.json')).items;
+            let recomendations = popularItems.splice(0, 6);
+            dispatch({ type: 'save_recomended', data: recomendations });
+            dispatch({ type: 'save_data', data: popularItems });
+            dispatch({ type: 'save_popular', data: popularItems });
+            dispatch({ type: 'save_top', data: topItems });
+            toast.warn('Офлайн режимът е пуснат.', {
+                position: "top-right",
+                autoClose: 8000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });    
+        })
     }, [dispatch]);
 
     // load page data

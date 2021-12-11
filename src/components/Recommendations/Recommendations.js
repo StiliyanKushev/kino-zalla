@@ -9,7 +9,7 @@ import {
 
 import $ from 'jquery';
 
-import spidermanPreview from '../../assets/spiderman-preview.png';
+import offlineBanner from '../../assets/offline-banner.png';
 import {
     baseUrl,
     imdbFetch,
@@ -40,7 +40,7 @@ function Recommendations() {
         else return;
 
         const background = url => 
-        `linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 83.85%), url(${url})`
+        `linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 83.85%), url(${url || offlineBanner})`
         
         setSlides(state.recomended.map(r => {
             return (
@@ -66,7 +66,7 @@ function Recommendations() {
                 <section className="preview-section dummy">
                     <div className="banner-image"></div>
                     <div className="bottom-holder">
-                         <img alt="" className="preview-image" src={spidermanPreview} />
+                         <img alt="" className="preview-image" src={offlineBanner} />
                         <div>
                             <p className="title">Spider-Man: No Way Home</p>
                             <p className="duration">2 ч 28 мин</p>
