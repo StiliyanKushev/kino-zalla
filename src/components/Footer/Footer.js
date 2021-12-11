@@ -1,10 +1,8 @@
 import './Footer.css';
 
 import {
-    useCallback,
     useContext,
     useEffect,
-    useRef,
     useState,
 } from 'react';
 
@@ -13,7 +11,6 @@ import SystemInfo from '../SystemInfo/SystemInfo';
 
 function Footer() {
     const maxLength = 5;
-    const firstPageSet = useRef();
     const [ state, dispatch ] = useContext(SearchContext);
     const [ hideLeft, setHideLeft ] = useState(true);
     const [ hideRight, setHideRight ] = useState(false);
@@ -21,12 +18,12 @@ function Footer() {
     const [ pageIndex, setPageIndex ] = useState(1);
     const [ pageArray, setPageArray ] = useState([1, 2, 3, 4]);
     
-    const firstPage = useCallback(e => {
+    const firstPage = e => {
         let newPageArray = [...new Array(maxLength - 1).keys()].map(i => i + 1);
         setPageArray(newPageArray);
         setPageIndex(1);
         dispatch({ type: 'set_page', data: { index:0, from: 'footer', max: pagesCount } });
-    },[dispatch, pagesCount]);
+    };
 
     const lastPage = e => {
         let newPageArray = [...new Array(maxLength - 1).keys()];
@@ -78,13 +75,8 @@ function Footer() {
         }
     }
 
-    // set the default page to first
-    useEffect(() => {
-        if(!firstPageSet.current && pagesCount !== 0){
-            firstPage();
-            firstPageSet.current = true;
-        }
-    },[firstPage, pagesCount])
+    // set first page
+    useEffect(() => pagesCount > 0 ? firstPage() : null ,[pagesCount]);
 
     // on mount and state change
     useEffect(() => {

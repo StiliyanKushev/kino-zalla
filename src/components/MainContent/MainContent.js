@@ -7,8 +7,11 @@ import {
     useState,
 } from 'react';
 
+import axios from 'axios';
+
 import loadingAsset from '../../assets/loading.gif';
 import {
+    backendBaseUrl,
     baseUrl,
     imdbFetch,
 } from '../../config';
@@ -22,6 +25,22 @@ function MainContent() {
     const [ pageItems, setPageItems ] = useState([]);
     const [ elements, setElements ] = useState([]);
 
+    const appendLocalServerData = async items => {
+        // get a list with all the names
+        let names = [];
+        for(let item of items)
+        if(item !== undefined)
+        names.push(item.title);
+        // look for starred films and update 'items'
+        let results = await axios.get(`${backendBaseUrl}/film/getStarred`, { params: { names } })
+        let starredFilms = results.data.data;
+        starredFilms = starredFilms.map(e => e.name);
+        for(let item of items)
+        if(item !== undefined && starredFilms.includes(item.title))
+        item.starred = true;
+        return items;
+    }
+
     // on mount
     useEffect(() => {
         // get top 250 movies
@@ -32,10 +51,12 @@ function MainContent() {
 
     useEffect(() => {
         if(state.filters) return; // don't use "top 250" data
+        if(!state.top[(state.pageIndex * pageFilmsCount)]) return; // data hasn't loaded yet
+        
         let items = [];
         for(let i = 0; i < pageFilmsCount; i++)
         items.push(state.top[(state.pageIndex * pageFilmsCount) + i]);
-        setPageItems(items);
+        (async items => setPageItems(await appendLocalServerData(items)))(items);
     }, [state.top, state.filters, state.pageIndex, dispatch])
 
 
