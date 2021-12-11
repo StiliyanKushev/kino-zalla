@@ -76,6 +76,7 @@ function Footer() {
     }
 
     // set first page
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => pagesCount > 0 ? firstPage() : null ,[pagesCount]);
 
     // on mount and state change

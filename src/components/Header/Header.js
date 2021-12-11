@@ -42,11 +42,17 @@ function Header() {
         })
     }
 
+    const handleSelect = option => {
+        if(option === 'not-starred'){
+            // todo
+        }
+    }
+
     return (
         <header>
             <select id="width_tmp_select"><option id="width_tmp_option"></option></select>
             <form>
-                <Select options={[
+                <Select callback={ handleSelect } options={[
                     ['other', 'Настройки'],
                     ['starred', 'Любими'],
                     ['not-starred', 'Нелюбими'],

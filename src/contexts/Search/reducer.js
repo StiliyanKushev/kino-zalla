@@ -1,7 +1,6 @@
 export const reducer = (state, action) => {
     switch (action.type) {
         case "set_page": {
-            console.log(action);
             return {
                 ...state,
                 pageIndex: action.data.index,

@@ -41,6 +41,11 @@ function Select(props) {
         setCurrentWidth(`${pxToVw(tmpW) + 3}vw`);
     }
 
+    const handleChangle = e => {
+        props.callback(e.target.value)
+        fixWidth();
+    }
+
     useEffect(() => {
         onOutsideClick();
         fixWidth();
@@ -54,7 +59,7 @@ function Select(props) {
             defaultValue={ props.options[0][0] }
             onClick={ () => setFocus(!isFocused) }
             onMouseDown= { () => setFocus(!isFocused) }
-            onChange={ fixWidth }
+            onChange={ handleChangle }
         > { options } </select>
     );
 }
