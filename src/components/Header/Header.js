@@ -90,19 +90,19 @@ function Header() {
             <form>
                 <button onClick={ handlePopular } className="actionBtn" >
                     Популярни
-                    { popularLoading && <i class="fas fa-spinner fa-spin"></i> }
+                    { popularLoading && <i className="fas fa-spinner fa-spin"></i> }
                 </button>
                 <button onClick={ handleFavorite } className="actionBtn" >
                     Любими
-                    { favoriteLoading && <i class="fas fa-spinner fa-spin"></i> }
+                    { favoriteLoading && <i className="fas fa-spinner fa-spin"></i> }
                 </button>
                 <button onClick={ handleTop250 } className="actionBtn" >
                     Топ 250
-                    { topLoading && <i class="fas fa-spinner fa-spin"></i> }
+                    { topLoading && <i className="fas fa-spinner fa-spin"></i> }
                 </button>
                 <button onClick={ handleInTheaters } className="actionBtn" >
                     В кината
-                    { theatersLoading && <i class="fas fa-spinner fa-spin"></i> }
+                    { theatersLoading && <i className="fas fa-spinner fa-spin"></i> }
                 </button>
                 <button onClick={ handleRandom } className="actionBtn" >
                     Рандъм
