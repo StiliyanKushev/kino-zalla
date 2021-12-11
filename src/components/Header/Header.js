@@ -36,33 +36,58 @@ function Header() {
     const handlePopular = e => {
         e.preventDefault();
         setPopularLoading(true);
+
+        if(state.popularSaved.length > 0){
+            dispatch({ type: 'load_popular' });
+            setPopularLoading(false);
+            return;
+        }
+
         imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
+            dispatch({ type: 'save_popular', data: res.items });
         }).catch(() => {  }).finally(() => { setPopularLoading(false) });
     }
 
     const handleTop250 = e => {
         e.preventDefault();
         setTopLoading(true);
+
+        if(state.topSaved.length > 0){
+            dispatch({ type: 'load_top' });
+            setTopLoading(false);
+            return;
+        }
+
         imdbFetch(`${baseUrl}/Top250Movies/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
+            dispatch({ type: 'save_top', data: res.items });
         }).catch(() => {}).finally(() => { setTopLoading(false) });
     }
     
     const handleInTheaters = e => {
         e.preventDefault();
         setTheatersLoading(true);
+
+        if(state.inTheatersSaved.length > 0){
+            dispatch({ type: 'load_theaters' });
+            setTheatersLoading(false);
+            return;
+        }
+
         imdbFetch(`${baseUrl}/InTheaters/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
+            dispatch({ type: 'save_theaters', data: res.items });
         }).catch(() => {}).finally(() => { setTheatersLoading(false) });
     }
 
     const handleFavorite = e => {
         e.preventDefault();
         setFavoriteLoading(true);
+
         axios.get(`${backendBaseUrl}/film/getStarredAll`).then(res => {
             if(res.data.data.length === 0){
                 toast.error('Няма запазени любими', {

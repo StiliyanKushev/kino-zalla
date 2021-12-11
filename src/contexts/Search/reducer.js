@@ -8,6 +8,7 @@ export const reducer = (state, action) => {
                 maxPages: action.data.max || state.maxPages
             }
         }
+
         case "save_data":{
             return {
                 ...state,
@@ -23,6 +24,7 @@ export const reducer = (state, action) => {
                 error: '',
             }
         }
+        
         case "search_end": {
             return {
                 ...state,
@@ -31,13 +33,63 @@ export const reducer = (state, action) => {
                 error: action.error,
             }
         }
+
         case "set_trailer": {
             return {
                 ...state,
                 trailerLink: action.data
             }
         }
-        
+
+        case "save_recomended": {
+            return {
+                ...state,
+                recomended: action.data,
+            }
+        }
+
+        case "save_popular": {
+            return {
+                ...state,
+                popularSaved: action.data
+            }
+        }
+
+        case "load_popular": {
+            return {
+                ...state,
+                data: state.popularSaved,
+            }
+        }
+    
+        case "save_top": {
+            return {
+                ...state,
+                topSaved: action.data
+            }
+        }
+
+        case "load_top": {
+            return {
+                ...state,
+                data: state.topSaved,
+            }
+        }
+
+        case "save_theaters": {
+            return {
+                ...state,
+                inTheatersSaved: action.data
+            }
+        }
+
+        case "load_theaters": {
+            return {
+                ...state,
+                data: state.inTheatersSaved,
+            }
+        }
+
         default: return state
     }
   }
@@ -46,6 +98,10 @@ export const initialState = {
     trailerLink: '',
     searching: false,
     data: [],
+    popularSaved: [],
+    topSaved: [],
+    inTheatersSaved: [],
+    recomended: [],
     error: '',
     pageIndex: 0,
     maxPages: 0,

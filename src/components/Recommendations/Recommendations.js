@@ -1,15 +1,63 @@
 import './Recommendations.css';
 
-import { useEffect } from 'react';
+import {
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
 import $ from 'jquery';
 
 import spidermanPreview from '../../assets/spiderman-preview.png';
+import {
+    baseUrl,
+    imdbFetch,
+} from '../../config';
+import { SearchContext } from '../../contexts/Search/provider';
 
 function Recommendations() {
+    const [ state, dispatch ] = useContext(SearchContext);
+    const [ slides, setSlides ] = useState([]);
+    const initialized = useRef(false);
+
+    const handleClick = item => {
+        imdbFetch(`${baseUrl}/YouTubeTrailer/$KEY/${item.id}`).then(res => {
+            dispatch({ type: 'set_trailer', data: `https://www.youtube.com/embed/${res.videoId}` })
+        }).catch(() => {});
+    }
+
+    // setup animations after slides are rendered in the dom
+    useEffect(() => initializeSlideshow() , [slides]);
+
+    // generate the slides after you get "recommended" in state
     useEffect(() => {
-        initializeSlideshow();
-    },[]);
+        if(state.recomended.length === 0) return;
+
+        // only run once
+        if(!initialized.current) 
+        initialized.current = true;
+        else return;
+
+        const background = url => 
+        `linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 83.85%), url(${url})`
+        
+        setSlides(state.recomended.map(r => {
+            return (
+                <section className="preview-section real" onClick={ e => handleClick(r) } key={r.id}>
+                    <div className="banner-image" style={{ background: background(r.thumbnailUrl) }} ></div>
+                    <div className="bottom-holder">
+                        <div alt="" className="preview-image" style={{ background: `url(${r.image})`}} />
+                        <div>
+                            <p className="title">{r.title}</p>
+                            <p className="duration">{r.year}</p>
+                        </div>
+                    </div>
+                </section>
+            )
+        }));
+    // eslint-disable-next-line
+    }, [state.recomended]);
 
     return (
         <div className="recomended">
@@ -25,66 +73,7 @@ function Recommendations() {
                         </div>
                     </div>
                 </section>
-                <section className="preview-section real">
-                    <div className="banner-image"></div>
-                    <div className="bottom-holder">
-                         <img alt="" className="preview-image" src={spidermanPreview} />
-                        <div>
-                            <p className="title">Spider-Man: No Way Home</p>
-                            <p className="duration">2 ч 28 мин</p>
-                        </div>
-                    </div>
-                </section>
-                <section className="preview-section real">
-                    <div className="banner-image"></div>
-                    <div className="bottom-holder">
-                         <img alt="" className="preview-image" src={spidermanPreview} />
-                        <div>
-                            <p className="title">Spider-Man: No Way Home</p>
-                            <p className="duration">2 ч 28 мин</p>
-                        </div>
-                    </div>
-                </section>
-                <section className="preview-section real">
-                    <div className="banner-image"></div>
-                    <div className="bottom-holder">
-                         <img alt="" className="preview-image" src={spidermanPreview} />
-                        <div>
-                            <p className="title">Spider-Man: No Way Home</p>
-                            <p className="duration">2 ч 28 мин</p>
-                        </div>
-                    </div>
-                </section>
-                <section className="preview-section real">
-                    <div className="banner-image"></div>
-                    <div className="bottom-holder">
-                         <img alt="" className="preview-image" src={spidermanPreview} />
-                        <div>
-                            <p className="title">Spider-Man: No Way Home</p>
-                            <p className="duration">2 ч 28 мин</p>
-                        </div>
-                    </div>
-                </section>
-                <section className="preview-section real">
-                    <div className="banner-image"></div>
-                    <div className="bottom-holder">
-                         <img alt="" className="preview-image" src={spidermanPreview} />
-                        <div>
-                            <p className="title">Spider-Man: No Way Home</p>
-                            <p className="duration">2 ч 28 мин</p>
-                        </div>
-                    </div>
-                </section>
-                <section className="preview-section real">
-                    <div className="banner-image"></div>
-                    <div className="bottom-holder">
-                         <img alt="" className="preview-image" src={spidermanPreview} />
-                        <div>
-                            <p className="title">Spider-Man: No Way Home</p>
-                            <p className="duration">2 ч 28 мин</p>
-                        </div>
-                    </div>
-                </section>
+                { slides }
             </div>
             <div className="controls">
                 <button>ГЛЕДАЙ</button>
@@ -146,7 +135,7 @@ function initializeSlideshow(){
         });
     }
 
-    let getInterval = () => setInterval(() => {
+    let intervalCallback = () => {
         let lis = $('.pages>li').get();
         for(let i = 0; i < lis.length; i++){
             if($(lis[i]).data('current')){
@@ -159,8 +148,8 @@ function initializeSlideshow(){
                 break;
             }
         }
-    }, 8000);
-    let interval = getInterval();
+    }
+    let interval = setInterval(intervalCallback, 8000);
 
     $('.preview-section.real').each(function (index) {
         _position(index, this);
@@ -177,7 +166,18 @@ function initializeSlideshow(){
 
     $('.pages').on('click', (e) => {
         clearInterval(interval);
-        interval = getInterval();
+        interval = setInterval(intervalCallback, 8000);
+    });
+
+    document.addEventListener('visibilitychange', function() {
+        if(document.hidden) {
+            // tab is now inactive
+            clearInterval(interval);
+        }
+        else {
+            // tab is active again
+            interval = setInterval(intervalCallback, 8000);
+        }
     });
 }
 

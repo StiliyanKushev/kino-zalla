@@ -17,9 +17,9 @@
 }
 
 .recomended .banner-image {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 83.85%), url(../../assets/spiderman-banner.png);
-    background-size: contain;
-    background-repeat: no-repeat;
+    /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 83.85%), url(../../assets/spiderman-banner.png); */
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
     width: 100%;
     height: 0;
     padding-top: 66.64%;
@@ -36,11 +36,18 @@
     width: 100%;
     position: absolute;
     height: fit-content;
+    cursor: pointer;
 }
 
 .recomended .preview-image {
-    width: 48%;
-    border-radius: 0.6vw;
+    height: 12.4vw !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    /* background-clip: content-box; */
+    margin-left: 0 !important;
+    border-radius: 0.6vw !important;
+    width: 48% !important;
 }
 
 .recomended .controls button {
@@ -120,6 +127,6 @@
 }
 
 .relative-holder {
-    top: -25%;
+    top: -24%;
     position: relative;
 }

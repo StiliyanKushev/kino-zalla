@@ -82,10 +82,10 @@ function Footer() {
     // on mount and state change
     useEffect(() => {
         let count = state.data.length;
-        setPagesCount(Math.max(count / 10, 1));
+        setPagesCount(Math.ceil(Math.max(count / 10, 1)));
 
         if(count <= maxLength) setPageArray([...new Array(count).keys()]);
-        else setPageArray([...new Array(maxLength - 1).keys()].map(i => i+1));
+        else setPageArray([...new Array(maxLength - 1).keys()].map(i => Math.ceil(i+1)));
     }, [state.data]);
 
     // update the pages if page index changed from elsewhere

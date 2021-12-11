@@ -41,11 +41,31 @@ function MainContent() {
         return items;
     }
 
+    const fetchThumbnails = async recomendations => {
+        return await Promise.all(recomendations.map(async r => {
+            try {
+                let res = await imdbFetch(`${baseUrl}/Images/$KEY/${r.id}/Short`);
+                let splited = res.items[0].image.split('.');
+                splited[splited.length - 2] = '_V1_UX384_CR0';
+                r.thumbnailUrl = splited.join('.');
+            } catch { r.thumbnailUrl = '404 not found' }
+            return r;
+        }));
+    }
+
     // on mount
     useEffect(() => {
         // get popular movies at start
-        imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
-            dispatch({ type: 'save_data', data: res.items });
+        imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(async res => {
+            let allItems = res.items;
+
+            // spare the first 6 for the sidebar recomendations
+            let recomendations = allItems.splice(0, 6);
+            recomendations = await fetchThumbnails(recomendations);
+            dispatch({ type: 'save_recomended', data: recomendations });
+
+            dispatch({ type: 'save_data', data: allItems });
+            dispatch({ type: 'save_popular', data: allItems });
         }).catch(() => {})
     }, [dispatch]);
 
