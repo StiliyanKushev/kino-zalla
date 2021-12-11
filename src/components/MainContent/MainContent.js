@@ -50,14 +50,13 @@ function MainContent() {
     }, [dispatch]);
 
     useEffect(() => {
-        if(state.filters) return; // don't use "top 250" data
-        if(!state.top[(state.pageIndex * pageFilmsCount)]) return; // data hasn't loaded yet
+        if(!state.data[(state.pageIndex * pageFilmsCount)]) return; // data hasn't loaded yet
         
         let items = [];
         for(let i = 0; i < pageFilmsCount; i++)
-        items.push(state.top[(state.pageIndex * pageFilmsCount) + i]);
+        items.push(state.data[(state.pageIndex * pageFilmsCount) + i]);
         (async items => setPageItems(await appendLocalServerData(items)))(items);
-    }, [state.top, state.filters, state.pageIndex, dispatch])
+    }, [state.data, state.pageIndex, dispatch])
 
 
     // dynamically generate the rows based on page index

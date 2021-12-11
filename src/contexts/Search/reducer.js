@@ -11,8 +11,7 @@ export const reducer = (state, action) => {
         case "save_top":{
             return {
                 ...state,
-                top: action.data,
-                filters: false,
+                data: action.data,
             }
         }
 
@@ -22,7 +21,6 @@ export const reducer = (state, action) => {
                 searching: true,
                 data: [],
                 error: '',
-                filters: true,
             }
         }
         case "search_end": {
@@ -31,7 +29,6 @@ export const reducer = (state, action) => {
                 searching: false,
                 data: action.data,
                 error: action.error,
-                filters: true,
             }
         }
         case "set_trailer": {
@@ -50,9 +47,7 @@ export const initialState = {
     searching: false,
     data: [],
     error: '',
-    top: [],
     pageIndex: 0,
     maxPages: 0,
     from: '',
-    filters: false,
 }
