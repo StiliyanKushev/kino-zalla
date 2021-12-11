@@ -11,10 +11,10 @@ filmRouter.get('/getStarredAll', async function (req, res) {
     res.json({ success:true, data: films })
 });
 
-filmRouter.post('/star/:title/:year/:image', async function (req, res) {
-    let { title, year, image } = req.params;
+filmRouter.post('/star/:imdbId/:title/:year/:image', async function (req, res) {
+    let { imdbId, title, year, image } = req.params;
     image = decodeURIComponent(image);
-    await new Film({ title, year, image, starred: true }).save();
+    await new Film({ title, year, image, starred: true, imdbId }).save();
     res.json({ success: true })
 });
 

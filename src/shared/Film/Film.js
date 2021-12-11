@@ -37,15 +37,15 @@ function Film(props) {
     const background = `linear-gradient(180deg, rgba(0, 0, 0, 0) 66.15%, #000000 100%), url(${highResImage()})`;
 
     const handleClick = e => {
-        imdbFetch(`${baseUrl}/YouTubeTrailer/$KEY/${props.data.id}`).then(res => {
+        imdbFetch(`${baseUrl}/YouTubeTrailer/$KEY/${props.data.imdbId || props.data.id}`).then(res => {
             dispatch({ type: 'set_trailer', data: `https://www.youtube.com/embed/${res.videoId}` })
         })
     }
 
     const handleStar = e => {
         e.stopPropagation();
-        let { title, year, image } = props.data;
-        if(!starred) axios.post(`${backendBaseUrl}/film/star/${title}/${year}/${encodeURIComponent(image)}`, props.data)
+        let { title, year, image, id } = props.data;
+        if(!starred) axios.post(`${backendBaseUrl}/film/star/${id}/${title}/${year}/${encodeURIComponent(image)}`, props.data)
         .then(() => setStarred(true))
         else axios.post(`${backendBaseUrl}/film/unstar/${props.data.title}`)
         .then(() => setStarred(false))

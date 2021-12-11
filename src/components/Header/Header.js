@@ -1,8 +1,13 @@
 import './Header.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useContext } from 'react';
 
 import axios from 'axios';
+import {
+    toast,
+    ToastContainer,
+} from 'react-toastify';
 
 import {
     backendBaseUrl,
@@ -51,6 +56,19 @@ function Header() {
     const handleFavorite = e => {
         e.preventDefault();
         axios.get(`${backendBaseUrl}/film/getStarredAll`).then(res => {
+            if(res.data.data.length === 0){
+                toast.error('Няма запазени любими', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                return;
+            }
+            
             let maxPages = Math.ceil(res.data.data.length / 10)
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', max: maxPages }})
             dispatch({ type: 'save_data', data: res.data.data });
@@ -67,6 +85,18 @@ function Header() {
                 <button onClick={ handleInTheaters } className="actionBtn" >В кината</button>
                 <button onClick={ handleRandom } className="actionBtn" >Рандъм</button>
             </form>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme={'dark'}
+            />
             <i className="fas fa-cog"></i>
         </header>
     );
