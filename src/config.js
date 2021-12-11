@@ -1,7 +1,9 @@
+import { toast } from 'react-toastify';
+
 import apiKeys from './apiKeys.js'; // this file returns an array of keys
 
 export const baseUrl = 'https://imdb-api.com/en/API';
-export const backendBaseUrl = 'http://localhost:4343';
+export const backendBaseUrl = 'http://192.168.1.146:4343'; // change this to your local machine ip
 
 export let apiKeyIndex = 0;
 export const nextKey = () => apiKeyIndex++;
@@ -24,6 +26,16 @@ export const imdbFetch = async (url, calledFromSelf=false) => {
     }
 
     // try them again from start to finish (maybe you get lucky)
-    if(!calledFromSelf) imdbFetch(url, true);
-    alert('Oops, none of the keys worked.');
+    if(!calledFromSelf) return imdbFetch(url, true);
+    else {
+        toast.error('Неуспешна връзка с imdb. Всички ключове са спрени.', {
+            position: "top-right",
+            autoClose: 10000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
 }

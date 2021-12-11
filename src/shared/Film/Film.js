@@ -39,7 +39,7 @@ function Film(props) {
     const handleClick = e => {
         imdbFetch(`${baseUrl}/YouTubeTrailer/$KEY/${props.data.imdbId || props.data.id}`).then(res => {
             dispatch({ type: 'set_trailer', data: `https://www.youtube.com/embed/${res.videoId}` })
-        })
+        }).catch(() => {});
     }
 
     const handleStar = e => {

@@ -1,13 +1,13 @@
 import './Header.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { useContext } from 'react';
+import {
+    useContext,
+    useState,
+} from 'react';
 
 import axios from 'axios';
-import {
-    toast,
-    ToastContainer,
-} from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import {
     backendBaseUrl,
@@ -18,6 +18,10 @@ import { SearchContext } from '../../contexts/Search/provider';
 
 function Header() {
     const [ state, dispatch ] = useContext(SearchContext);
+    const [ popularLoading, setPopularLoading ] = useState(false);
+    const [ favoriteLoading, setFavoriteLoading ] = useState(false);
+    const [ topLoading, setTopLoading ] = useState(false);
+    const [ theatersLoading, setTheatersLoading ] = useState(false);
 
     const setFirstPage = () => {
         dispatch({ type: 'set_page', data: { index: 0, from: 'header' } })
@@ -31,30 +35,37 @@ function Header() {
 
     const handlePopular = e => {
         e.preventDefault();
+        setPopularLoading(true);
         imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
-        });
+            setPopularLoading(false);
+        }).catch(() => {});
     }
 
     const handleTop250 = e => {
         e.preventDefault();
+        setTopLoading(true);
         imdbFetch(`${baseUrl}/Top250Movies/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
-        })
+            setTopLoading(false);
+        }).catch(() => {});
     }
     
     const handleInTheaters = e => {
         e.preventDefault();
+        setTheatersLoading(true);
         imdbFetch(`${baseUrl}/InTheaters/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
-        })
+            setTheatersLoading(false);
+        }).catch(() => {});
     }
 
     const handleFavorite = e => {
         e.preventDefault();
+        setFavoriteLoading(true);
         axios.get(`${backendBaseUrl}/film/getStarredAll`).then(res => {
             if(res.data.data.length === 0){
                 toast.error('Няма запазени любими', {
@@ -72,6 +83,7 @@ function Header() {
             let maxPages = Math.ceil(res.data.data.length / 10)
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', max: maxPages }})
             dispatch({ type: 'save_data', data: res.data.data });
+            setFavoriteLoading(false);
         })
     }
 
@@ -79,24 +91,26 @@ function Header() {
         <header>
             <select id="width_tmp_select"><option id="width_tmp_option"></option></select>
             <form>
-                <button onClick={ handlePopular } className="actionBtn" >Популярни</button>
-                <button onClick={ handleFavorite } className="actionBtn" >Любими</button>
-                <button onClick={ handleTop250 } className="actionBtn" >Топ 250</button>
-                <button onClick={ handleInTheaters } className="actionBtn" >В кината</button>
-                <button onClick={ handleRandom } className="actionBtn" >Рандъм</button>
+                <button onClick={ handlePopular } className="actionBtn" >
+                    Популярни
+                    { popularLoading && <i class="fas fa-spinner fa-spin"></i> }
+                </button>
+                <button onClick={ handleFavorite } className="actionBtn" >
+                    Любими
+                    { favoriteLoading && <i class="fas fa-spinner fa-spin"></i> }
+                </button>
+                <button onClick={ handleTop250 } className="actionBtn" >
+                    Топ 250
+                    { topLoading && <i class="fas fa-spinner fa-spin"></i> }
+                </button>
+                <button onClick={ handleInTheaters } className="actionBtn" >
+                    В кината
+                    { theatersLoading && <i class="fas fa-spinner fa-spin"></i> }
+                </button>
+                <button onClick={ handleRandom } className="actionBtn" >
+                    Рандъм
+                </button>
             </form>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme={'dark'}
-            />
             <i className="fas fa-cog"></i>
         </header>
     );

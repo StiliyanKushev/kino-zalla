@@ -13,6 +13,11 @@ main header .fas {
     cursor: pointer;
 }
 
+main header .fa-spin {
+    font-size: 1rem;
+    margin-left: .7vw;
+}
+
 .actionBtn {
     cursor: pointer;
     outline: none;

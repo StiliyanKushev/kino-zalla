@@ -46,7 +46,7 @@ function MainContent() {
         // get popular movies at start
         imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
             dispatch({ type: 'save_data', data: res.items });
-        })
+        }).catch(() => {})
     }, [dispatch]);
 
     // load page data
