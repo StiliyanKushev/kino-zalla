@@ -39,8 +39,7 @@ function Header() {
         imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
-            setPopularLoading(false);
-        }).catch(() => {});
+        }).catch(() => {  }).finally(() => { setPopularLoading(false) });
     }
 
     const handleTop250 = e => {
@@ -49,8 +48,7 @@ function Header() {
         imdbFetch(`${baseUrl}/Top250Movies/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
-            setTopLoading(false);
-        }).catch(() => {});
+        }).catch(() => {}).finally(() => { setTopLoading(false) });
     }
     
     const handleInTheaters = e => {
@@ -59,8 +57,7 @@ function Header() {
         imdbFetch(`${baseUrl}/InTheaters/$KEY`).then(res => {
             setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
-            setTheatersLoading(false);
-        }).catch(() => {});
+        }).catch(() => {}).finally(() => { setTheatersLoading(false) });
     }
 
     const handleFavorite = e => {
