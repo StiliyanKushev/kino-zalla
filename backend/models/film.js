@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 let filmSchema = new mongoose.Schema({
-    name:String,
+    title:String,
     year:Number,
-    image:String
+    image:String,
+    starred: { type: Boolean, default: true }
 });
 
 let Film = mongoose.model('Film', filmSchema);

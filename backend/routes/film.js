@@ -2,19 +2,24 @@ const Film = require('../models/film');
 const filmRouter = require('express').Router()
 
 filmRouter.get('/getStarred', async function (req, res) {
-    let films = await Film.find({ name: { $in: req.query.names } });
+    let films = await Film.find({ title: { $in: req.query.titles } });
     res.json({ success:true, data: films })
 });
 
-filmRouter.post('/star/:name/:year/:image', async function (req, res) {
-    let { name, year, image } = req.params;
+filmRouter.get('/getStarredAll', async function (req, res) {
+    let films = await Film.find({});
+    res.json({ success:true, data: films })
+});
+
+filmRouter.post('/star/:title/:year/:image', async function (req, res) {
+    let { title, year, image } = req.params;
     image = decodeURIComponent(image);
-    await new Film({ name, year, image }).save();
+    await new Film({ title, year, image, starred: true }).save();
     res.json({ success: true })
 });
 
-filmRouter.post('/unstar/:name', async function (req, res) {
-    await Film.findOneAndDelete({ name: req.params.name });
+filmRouter.post('/unstar/:title', async function (req, res) {
+    await Film.findOneAndDelete({ title: req.params.title });
     res.json({ success: true })
 });
 

@@ -122,7 +122,7 @@ function Footer() {
             <ul className="page-indexer">
                 {
                     pagesCount <= maxLength ? (<>
-                        {[...new Array(pagesCount).keys()].map((i) => 
+                        {[...new Array(Math.ceil(pagesCount)).keys()].map((i) => 
                             <li key={i+1} 
                                 className={ pageIndex === i+1 ? 'selected' : '' }
                                 onClick={ () => handleClick(i+1) }

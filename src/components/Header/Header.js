@@ -2,15 +2,21 @@ import './Header.css';
 
 import { useContext } from 'react';
 
+import axios from 'axios';
+
 import {
+    backendBaseUrl,
     baseUrl,
     imdbFetch,
 } from '../../config';
 import { SearchContext } from '../../contexts/Search/provider';
-import Select from '../../shared/Select/Select';
 
 function Header() {
     const [ state, dispatch ] = useContext(SearchContext);
+
+    const setFirstPage = () => {
+        dispatch({ type: 'set_page', data: { index: 0, from: 'header' } })
+    }
 
     const handleRandom = e => {
         e.preventDefault();
@@ -21,7 +27,7 @@ function Header() {
     const handlePopular = e => {
         e.preventDefault();
         imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
-            dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
+            setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
         });
     }
@@ -29,7 +35,7 @@ function Header() {
     const handleTop250 = e => {
         e.preventDefault();
         imdbFetch(`${baseUrl}/Top250Movies/$KEY`).then(res => {
-            dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
+            setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
         })
     }
@@ -37,28 +43,26 @@ function Header() {
     const handleInTheaters = e => {
         e.preventDefault();
         imdbFetch(`${baseUrl}/InTheaters/$KEY`).then(res => {
-            dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
+            setFirstPage();
             dispatch({ type: 'save_data', data: res.items });
         })
     }
 
-    const handleSelect = option => {
-        if(option === 'not-starred'){
-            // todo
-        }
+    const handleFavorite = e => {
+        e.preventDefault();
+        axios.get(`${backendBaseUrl}/film/getStarredAll`).then(res => {
+            let maxPages = Math.ceil(res.data.data.length / 10)
+            dispatch({ type: 'set_page', data: { index: 0, from: 'header', max: maxPages }})
+            dispatch({ type: 'save_data', data: res.data.data });
+        })
     }
 
     return (
         <header>
             <select id="width_tmp_select"><option id="width_tmp_option"></option></select>
             <form>
-                <Select callback={ handleSelect } options={[
-                    ['other', 'Настройки'],
-                    ['starred', 'Любими'],
-                    ['not-starred', 'Нелюбими'],
-                    ['all', 'Всички'],
-                ]}/>
                 <button onClick={ handlePopular } className="actionBtn" >Популярни</button>
+                <button onClick={ handleFavorite } className="actionBtn" >Любими</button>
                 <button onClick={ handleTop250 } className="actionBtn" >Топ 250</button>
                 <button onClick={ handleInTheaters } className="actionBtn" >В кината</button>
                 <button onClick={ handleRandom } className="actionBtn" >Рандъм</button>

@@ -27,14 +27,14 @@ function MainContent() {
 
     const appendLocalServerData = async items => {
         // get a list with all the names
-        let names = [];
+        let titles = [];
         for(let item of items)
         if(item !== undefined)
-        names.push(item.title);
+        titles.push(item.title);
         // look for starred films and update 'items'
-        let results = await axios.get(`${backendBaseUrl}/film/getStarred`, { params: { names } })
+        let results = await axios.get(`${backendBaseUrl}/film/getStarred`, { params: { titles } })
         let starredFilms = results.data.data;
-        starredFilms = starredFilms.map(e => e.name);
+        starredFilms = starredFilms.map(e => e.title);
         for(let item of items)
         if(item !== undefined && starredFilms.includes(item.title))
         item.starred = true;
@@ -49,14 +49,18 @@ function MainContent() {
         })
     }, [dispatch]);
 
+    // load page data
     useEffect(() => {
         if(!state.data[(state.pageIndex * pageFilmsCount)]) return; // data hasn't loaded yet
         
         let items = [];
         for(let i = 0; i < pageFilmsCount; i++)
         items.push(state.data[(state.pageIndex * pageFilmsCount) + i]);
+        
+        // add local data to imdb
+        if(!state.local)
         (async items => setPageItems(await appendLocalServerData(items)))(items);
-    }, [state.data, state.pageIndex, dispatch])
+    }, [state.data, state.pageIndex, dispatch, state.local])
 
 
     // dynamically generate the rows based on page index
