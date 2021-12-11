@@ -9,7 +9,7 @@ import spidermanPreview from '../../assets/spiderman-preview.png';
 function Recommendations() {
     useEffect(() => {
         initializeSlideshow();
-    });
+    },[]);
 
     return (
         <div className="recomended">

@@ -8,7 +8,7 @@ export const reducer = (state, action) => {
                 maxPages: action.data.max || state.maxPages
             }
         }
-        case "save_top":{
+        case "save_data":{
             return {
                 ...state,
                 data: action.data,

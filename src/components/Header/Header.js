@@ -22,7 +22,7 @@ function Header() {
         e.preventDefault();
         imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
-            dispatch({ type: 'save_top', data: res.items });
+            dispatch({ type: 'save_data', data: res.items });
         });
     }
 
@@ -30,7 +30,7 @@ function Header() {
         e.preventDefault();
         imdbFetch(`${baseUrl}/Top250Movies/$KEY`).then(res => {
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
-            dispatch({ type: 'save_top', data: res.items });
+            dispatch({ type: 'save_data', data: res.items });
         })
     }
     
@@ -38,7 +38,7 @@ function Header() {
         e.preventDefault();
         imdbFetch(`${baseUrl}/InTheaters/$KEY`).then(res => {
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', maxPages: Math.max(res.items / 10, 1) } })
-            dispatch({ type: 'save_top', data: res.items });
+            dispatch({ type: 'save_data', data: res.items });
         })
     }
 

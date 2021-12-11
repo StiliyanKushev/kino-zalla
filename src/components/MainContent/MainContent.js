@@ -43,9 +43,9 @@ function MainContent() {
 
     // on mount
     useEffect(() => {
-        // get top 250 movies
+        // get popular movies at start
         imdbFetch(`${baseUrl}/MostPopularMovies/$KEY`).then(res => {
-            dispatch({ type: 'save_top', data: res.items });
+            dispatch({ type: 'save_data', data: res.items });
         })
     }, [dispatch]);
 
