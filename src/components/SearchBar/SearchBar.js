@@ -18,6 +18,11 @@ function SearchBar() {
     const handleSearch = e => {
         e.preventDefault();
 
+        if(value.trim() === '') {
+            dispatch({ type: 'set_popular' })
+            return;
+        }
+
         // inform the app for the beggining of searching
         dispatch({ type: 'search_start' })
 

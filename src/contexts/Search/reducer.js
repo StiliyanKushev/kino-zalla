@@ -9,6 +9,13 @@ export const reducer = (state, action) => {
             }
         }
 
+        case 'set_popular': {
+            return {
+                ...state,
+                data: state.popularSaved,
+            }
+        }
+
         case "save_data":{
             return {
                 ...state,
