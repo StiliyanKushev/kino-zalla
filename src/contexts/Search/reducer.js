@@ -9,6 +9,13 @@ export const reducer = (state, action) => {
             }
         }
 
+        case 'recomend-init' : {
+            return {
+                ...state,
+                recomendInitialized: true,
+            }
+        }
+
         case 'set_popular': {
             return {
                 ...state,
@@ -102,6 +109,7 @@ export const reducer = (state, action) => {
 }
   
 export const initialState = {
+    recomendInitialized: false,
     popupLink: '',
     searching: false,
     data: [],

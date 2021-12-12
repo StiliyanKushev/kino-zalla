@@ -76,6 +76,7 @@ streamRouter.get('/film/:name', async function (req, res) {
     // I needed to keep the indexes
     // so I can get the seeds of each mp4 file
     responseData = responseData.filter(e => e != null)
+    if(responseData.length > 8) responseData = responseData.splice(0, 8);
     res.json({ options: responseData })
 });
 

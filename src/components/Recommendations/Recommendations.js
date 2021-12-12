@@ -3,23 +3,89 @@ import './Recommendations.css';
 import {
     useContext,
     useEffect,
-    useRef,
     useState,
 } from 'react';
 
+import axios from 'axios';
 import $ from 'jquery';
+import { toast } from 'react-toastify';
 
 import offlineBanner from '../../assets/offline-banner.png';
 import {
+    backendBaseUrl,
     baseUrl,
     imdbFetch,
 } from '../../config';
 import { SearchContext } from '../../contexts/Search/provider';
+import { StreamContext } from '../../contexts/Stream/provider';
 
 function Recommendations() {
     const [ state, dispatch ] = useContext(SearchContext);
+    const [, dispatchStream ] = useContext(StreamContext);
     const [ slides, setSlides ] = useState([]);
-    const initialized = useRef(false);
+
+    const getCurrentTitle = () => {
+        for(let slide of $('.preview-section.real')){
+            if($($(slide)[0]).css('opacity') == 1) {
+                let title = $($($($(slide)[0]).children()[1]).children()[1]).children()[0].textContent;
+                return title;
+            }
+        }
+    }
+
+    const handlePlay = e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        toast.info(`Searching for torrent`, {
+            position: "top-right",
+            autoClose: false,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+
+        axios.get(`${backendBaseUrl}/stream/film/${getCurrentTitle()}`).then(res => {
+            toast.dismiss();
+            const options = res.data.options;
+            if(options){
+                toast.success(`${options.length} torrents found.`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                dispatchStream({ type: 'show_options', data: options })
+            }
+            else {
+                toast.error('Could not find torrent.', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }).catch(() => {
+            toast.dismiss();
+            toast.error('Could not connect to backend.', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
+    }
 
     const handleClick = item => {
         imdbFetch(`${baseUrl}/YouTubeTrailer/$KEY/${item.id}`).then(res => {
@@ -35,8 +101,8 @@ function Recommendations() {
         if(state.recomended.length === 0) return;
 
         // only run once
-        if(!initialized.current) 
-        initialized.current = true;
+        if(!state.recomendInitialized) 
+        dispatch({ type: 'recomend-init' })
         else return;
 
         const background = url => 
@@ -76,7 +142,7 @@ function Recommendations() {
                 { slides }
             </div>
             <div className="controls">
-                <button>ГЛЕДАЙ</button>
+                <button onClick={ handlePlay }>ГЛЕДАЙ</button>
                 <ul className="pages">
                     <div className="relative-holder"><li className="selected"></li></div>
                     <li></li>
