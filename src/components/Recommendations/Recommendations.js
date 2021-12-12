@@ -23,7 +23,7 @@ function Recommendations() {
 
     const handleClick = item => {
         imdbFetch(`${baseUrl}/YouTubeTrailer/$KEY/${item.id}`).then(res => {
-            dispatch({ type: 'set_trailer', data: `https://www.youtube.com/embed/${res.videoId}` })
+            dispatch({ type: 'set_popup', data: `https://www.youtube.com/embed/${res.videoId}` })
         }).catch(() => {});
     }
 
@@ -61,7 +61,7 @@ function Recommendations() {
 
     return (
         <div className="recomended">
-            <h2>Препоръчителни филма</h2>
+            <h2>Препоръчани филми</h2>
             <div className="placeholder">
                 <section className="preview-section dummy">
                     <div className="banner-image"></div>

@@ -14,7 +14,7 @@ function SystemInfo() {
     const tick = () => {
         fetch(`${backendBaseUrl}/sys/info`).then(res => res.json()).then(res => {
             setSystemInformation(res.data);
-        })
+        }).catch(() => {})
     }
 
     useEffect(() => {

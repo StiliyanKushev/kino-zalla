@@ -41,10 +41,10 @@ export const reducer = (state, action) => {
             }
         }
 
-        case "set_trailer": {
+        case "set_popup": {
             return {
                 ...state,
-                trailerLink: action.data
+                popupLink: action.data
             }
         }
 
@@ -99,10 +99,10 @@ export const reducer = (state, action) => {
 
         default: return state
     }
-  }
+}
   
 export const initialState = {
-    trailerLink: '',
+    popupLink: '',
     searching: false,
     data: [],
     popularSaved: [],

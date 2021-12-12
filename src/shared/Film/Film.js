@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import {
     backendBaseUrl,
@@ -15,9 +16,11 @@ import {
     imdbFetch,
 } from '../../config';
 import { SearchContext } from '../../contexts/Search/provider';
+import { StreamContext } from '../../contexts/Stream/provider';
 
 function Film(props) {
     const [, dispatch ] = useContext(SearchContext);
+    const [, dispatchStream ] = useContext(StreamContext);
     const [ starred, setStarred ] = useState(false);
 
     const highResImage = () => {
@@ -38,33 +41,87 @@ function Film(props) {
 
     const isEmpty = () => Object.keys(props.data).length === 0;
 
+    
     const handleClick = e => {
         if(isEmpty()) return;
-
+        
         imdbFetch(`${baseUrl}/YouTubeTrailer/$KEY/${props.data.imdbId || props.data.id}`).then(res => {
-            dispatch({ type: 'set_trailer', data: `https://www.youtube.com/embed/${res.videoId}` })
+            dispatch({ type: 'set_popup', data: `https://www.youtube.com/embed/${res.videoId}` })
         }).catch(() => {});
     }
-
+    
     const handleStar = e => {
         e.stopPropagation();
         if(isEmpty()) return;
         
         let { title, year, image, id } = props.data;
-        if(!starred) axios.post(`${backendBaseUrl}/film/star/${id}/${title}/${year}/${encodeURIComponent(image)}`, props.data)
+        if(!starred) axios.post(`${backendBaseUrl}/film/star/${id}/${title}/${year || -1}/${encodeURIComponent(image)}`, props.data)
         .then(() => setStarred(true))
         else axios.post(`${backendBaseUrl}/film/unstar/${props.data.title}`)
         .then(() => setStarred(false))
+    }
+    
+    const handlePlay = e => {
+        e.stopPropagation();
+
+        toast.info(`Searching for torrent`, {
+            position: "top-right",
+            autoClose: false,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+
+        axios.get(`${backendBaseUrl}/stream/film/${props.data.title}`).then(res => {
+            toast.dismiss();
+            const options = res.data.options;
+            if(options){
+                toast.success(`${options.length} torrents found.`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                dispatchStream({ type: 'show_options', data: options })
+            }
+            else {
+                toast.error('Could not find torrent.', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }).catch(() => {
+            toast.dismiss();
+            toast.error('Could not connect to backend.', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
     }
 
     return (
         <div className={`film ${Object.keys(props.data).length === 0 ? 'hidden' : ''}`}>
             <div className="banner" style={{ background }} onClick={ handleClick }>
                 <i className={`${ starred ? 'fas' : 'far' } fa-star`} onClick={ handleStar }></i>
-                <i className="fas fa-play-circle"></i>
+                <i className="fas fa-play-circle" onClick={ handlePlay }></i>
             </div>
             <p className="title">{ props.data.title || '' }</p>
-            <p className="duration"> { props.data.year  || '' } </p>
+            <p className="duration"> { props.data.year ?  props.data.year === -1 ? '' : props.data.year : '' } </p>
         </div>
     );
 }

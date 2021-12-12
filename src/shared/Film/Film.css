@@ -30,6 +30,7 @@ main .films-holder .banner .fa-star {
 }
 
 main .films-holder .banner .fa-play-circle {
+    padding: 0.1vw;
     font-size: 1.8vw;
     position: relative;
     top: -2.7vw;
