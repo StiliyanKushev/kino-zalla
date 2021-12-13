@@ -15,7 +15,7 @@ streamRouter.get('/film/:name', async function (req, res) {
     // search for a magnet link
     const torrents = await TorrentSearchApi.search(film, 'Movies', 20);
     const magnets = (await Promise.all(torrents.map(async t => await TorrentSearchApi.getMagnet(t))))
-    
+
     // create engine for each magnet and wait for them to load
     let engines = await Promise.all(magnets.map(m => {
         if(!m) return m; // provider blocked scrape call
@@ -71,8 +71,8 @@ streamRouter.get('/film/:name', async function (req, res) {
         }
     });
 
-    // remove failed torrent scrapes now
-    // that wasn't done before because
+    // remove failed torrent scrapes now.
+    // That wasn't done before because
     // I needed to keep the indexes
     // so I can get the seeds of each mp4 file
     responseData = responseData.filter(e => e != null)
@@ -84,7 +84,8 @@ streamRouter.get('/play/:id', async function (req, res) {
     const id = req.params.id;
     const range = req.headers.range;
     
-    console.log(id);
+    // helpful for debugging
+    console.log(`Received request for uuid: ${id}`);
 
     if (!range)
     res.status(400).send("Requires Range header");

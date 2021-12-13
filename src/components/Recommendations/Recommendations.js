@@ -38,6 +38,9 @@ function Recommendations() {
         e.preventDefault();
         e.stopPropagation();
 
+        const cancelToken = axios.CancelToken.source();
+        let didCancel = false;
+
         toast.info(`Searching for torrent`, {
             position: "top-right",
             autoClose: false,
@@ -46,9 +49,12 @@ function Recommendations() {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
+            onClose: () => (didCancel = true) && cancelToken.cancel()
         });
 
-        axios.get(`${backendBaseUrl}/stream/film/${getCurrentTitle()}`).then(res => {
+        axios.get(`${backendBaseUrl}/stream/film/${getCurrentTitle()}`,{
+            cancelToken: cancelToken.token
+        }).then(res => {
             toast.dismiss();
             const options = res.data.options;
             if(options){
@@ -76,6 +82,8 @@ function Recommendations() {
             }
         }).catch(() => {
             toast.dismiss();
+
+            if(!didCancel)
             toast.error('Could not connect to backend.', {
                 position: "top-right",
                 autoClose: 5000,
