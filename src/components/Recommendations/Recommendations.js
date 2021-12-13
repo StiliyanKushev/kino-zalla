@@ -26,6 +26,7 @@ function Recommendations() {
 
     const getCurrentTitle = () => {
         for(let slide of $('.preview-section.real')){
+            // eslint-disable-next-line eqeqeq
             if($($(slide)[0]).css('opacity') == 1) {
                 let title = $($($($(slide)[0]).children()[1]).children()[1]).children()[0].textContent;
                 return title;

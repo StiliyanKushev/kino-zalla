@@ -6,26 +6,15 @@ import {
     useState,
 } from 'react';
 
-import { backendBaseUrl } from '../../config';
+import { socket } from '../../config';
 
 function SystemInfo() {
     const [ systemInformation, setSystemInformation ] = useState('Fetching system information...');
 
-    const tick = () => {
-        fetch(`${backendBaseUrl}/sys/info`).then(res => res.json()).then(res => {
-            setSystemInformation(res.data);
-        }).catch(() => {})
-    }
-
-    useEffect(() => {
-        tick();
-        setInterval(() => {
-            tick();
-        },10000);
-    },[]);
+    useEffect(() => socket.on('system-info', msg => setSystemInformation(msg)) ,[]);
 
     return (
-        <p className="system-information">{systemInformation}</p>
+        <p className="system-information">{ systemInformation }</p>
     );
 }
 

@@ -1,7 +1,6 @@
-const systemRouter = require('express').Router()
 const osu = require('node-os-utils')
 
-systemRouter.get('/info', async function (req, res) {
+const stats = async () => {
     // get cpu utalization
     let cpuInfo = await osu.cpu.usage();
     let result = `CPU: ${cpuInfo}% | `;
@@ -14,7 +13,14 @@ systemRouter.get('/info', async function (req, res) {
     // get OS name
     let osInfo = await osu.os.oos();
     result += `OS: ${osInfo} `;
-    res.json({ data: result })
-});
 
-module.exports = systemRouter;
+    return result;
+}
+
+const systemEmitter = io => {
+    setInterval(async () => {
+        io.emit('system-info', await stats());
+    }, 10000);
+};
+
+module.exports = systemEmitter;
