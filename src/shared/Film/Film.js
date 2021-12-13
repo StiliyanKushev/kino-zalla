@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import axios from 'axios';
+import $ from 'jquery';
 import { toast } from 'react-toastify';
 
 import {
@@ -67,6 +68,9 @@ function Film(props) {
         const cancelToken = axios.CancelToken.source();
         let didCancel = false;
 
+        // disable mouse input for the rest of the app
+        $('.preventInput').addClass('show');
+
         toast.info(`Searching for torrent`, {
             position: "top-right",
             autoClose: false,
@@ -82,6 +86,8 @@ function Film(props) {
             cancelToken: cancelToken.token
         }).then(res => {
             toast.dismiss();
+            $('.preventInput').removeClass('show');
+
             const options = res.data.options;
             if(options){
                 toast.success(`${options.length} torrents found.`, {
@@ -108,6 +114,7 @@ function Film(props) {
             }
         }).catch(() => {
             toast.dismiss();
+            $('.preventInput').removeClass('show');
 
             if(!didCancel)
             toast.error('Could not connect to backend.', {

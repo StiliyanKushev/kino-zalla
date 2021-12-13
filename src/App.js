@@ -27,6 +27,8 @@ function App() {
                     pauseOnHover
                     theme={'dark'}
                 />
+                {/* some components make this visible to disable mouse input */}
+                <div className="preventInput"/>
                 <StreamOptions/>
                 <BlurOverlay/>
                 <SideMenu/>
