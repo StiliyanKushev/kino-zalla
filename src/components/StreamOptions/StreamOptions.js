@@ -21,7 +21,7 @@ function StreamOptions() {
 
     const handleClick = f => {
         handleClose();
-        dispatchFilm({ type: 'set_popup', data: `${backendBaseUrl}/stream/play/${f.uuid}` })
+        dispatchFilm({ type: 'set_popup', data: `${backendBaseUrl}/stream/play/${encodeURIComponent(f.magnet)}` })
     }
 
     useEffect(() => {

@@ -90,6 +90,7 @@ function Header() {
 
         axios.get(`${backendBaseUrl}/film/getStarredAll`).then(res => {
             if(res.data.data.length === 0){
+                setFavoriteLoading(false);
                 toast.error('Няма запазени любими', {
                     position: "top-right",
                     autoClose: 5000,
@@ -106,7 +107,7 @@ function Header() {
             dispatch({ type: 'set_page', data: { index: 0, from: 'header', max: maxPages }})
             dispatch({ type: 'save_data', data: res.data.data });
             setFavoriteLoading(false);
-        })
+        }).catch(() => setFavoriteLoading(false))
     }
 
     return (
