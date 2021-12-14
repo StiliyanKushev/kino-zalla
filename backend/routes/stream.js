@@ -12,12 +12,11 @@ const staticPool = new StaticPool({
 });
 
 streamRouter.get('/film/:name', async function (req, res) {
-    const responseData = await staticPool.exec({ purpose: 'search', params: req.params });
+    const responseData = await staticPool.exec(req.params.name);
     res.json(responseData ? { options: responseData } : { success: false })
 });
 
 // this is the file that is being streamed
-let mp4;
 streamRouter.get('/play/:magnet', async function (req, res) {
     const magnet = decodeURIComponent(req.params.magnet);
     const range = req.headers.range;
@@ -28,14 +27,12 @@ streamRouter.get('/play/:magnet', async function (req, res) {
     if (!range)
     return res.status(400).send("Requires Range header");
 
-    if(!mp4){
-        // reconstuct the torrentStream engine
-        let engine = torrentStream(magnet);
-        await new Promise(resolve => engine.on('ready', () => resolve()))
+    // reconstuct the torrentStream engine
+    let engine = torrentStream(magnet);
+    await new Promise(resolve => engine.on('ready', () => resolve()))
 
-        // get mp4 file
-        mp4 = engine.files.find(f => f.name.toLocaleLowerCase().endsWith('.mp4'));
-    }
+    // get mp4 file
+    const mp4 = engine.files.find(f => f.name.toLocaleLowerCase().endsWith('.mp4'));
 
     // Parse Range
     const videoSize = mp4.length;
@@ -56,9 +53,7 @@ streamRouter.get('/play/:magnet', async function (req, res) {
     res.writeHead(206, headers);
 
     // create video read stream for this particular chunk
-    console.time();
     const videoStream = mp4.createReadStream({ start, end });
-    console.timeEnd();
 
     // Stream the video chunk to the client
     videoStream.pipe(res);

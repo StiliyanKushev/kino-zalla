@@ -5,10 +5,8 @@ TorrentSearchApi.enablePublicProviders();
 
 (async() => {
     console.log(`thread ${threadId} is up and running.`);
-    parentPort.on('message', async ({ purpose, params }) => {
-        console.log(purpose, params);
-        const result = purpose === 'search' ? await search(params.name) : await stream(params.magnet);
-        parentPort.postMessage(result);
+    parentPort.on('message', async (film) => {
+        parentPort.postMessage(await search(film));
     });
 })();
 
@@ -84,8 +82,4 @@ async function search(film) {
     if(responseData.length > 8) responseData = responseData.splice(0, 8);
 
     return responseData;
-}
-
-async function stream(magnet){
-    // todo
 }
