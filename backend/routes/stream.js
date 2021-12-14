@@ -12,10 +12,7 @@ const staticPool = new StaticPool({
 });
 
 streamRouter.get('/film/:name', async function (req, res) {
-    const film = req.params.name;
-    console.log(`Searching for ${film}`);
-
-    const responseData = await staticPool.exec('search', film);
+    const responseData = await staticPool.exec({ purpose: 'search', params: req.params });
     res.json(responseData ? { options: responseData } : { success: false })
 });
 
@@ -29,7 +26,7 @@ streamRouter.get('/play/:magnet', async function (req, res) {
     console.log(`Received request: ${magnet}`);
 
     if (!range)
-    res.status(400).send("Requires Range header");
+    return res.status(400).send("Requires Range header");
 
     if(!mp4){
         // reconstuct the torrentStream engine
@@ -59,7 +56,9 @@ streamRouter.get('/play/:magnet', async function (req, res) {
     res.writeHead(206, headers);
 
     // create video read stream for this particular chunk
+    console.time();
     const videoStream = mp4.createReadStream({ start, end });
+    console.timeEnd();
 
     // Stream the video chunk to the client
     videoStream.pipe(res);

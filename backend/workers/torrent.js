@@ -5,9 +5,10 @@ TorrentSearchApi.enablePublicProviders();
 
 (async() => {
     console.log(`thread ${threadId} is up and running.`);
-    parentPort.on('message', async (purpose, ...args) => {
-      const result = purpose === 'search' ? await search(args) : await stream(args);
-      parentPort.postMessage(result);
+    parentPort.on('message', async ({ purpose, params }) => {
+        console.log(purpose, params);
+        const result = purpose === 'search' ? await search(params.name) : await stream(params.magnet);
+        parentPort.postMessage(result);
     });
 })();
 
@@ -20,6 +21,8 @@ const timeout = (prom, time) => {
 }
 
 async function search(film) {
+    console.log(`Searching for ${film}`);
+
     // search for a magnet link
     const torrents = await TorrentSearchApi.search(film, 'Movies', 20);
     const magnets = (await Promise.all(torrents.map(async t => await TorrentSearchApi.getMagnet(t))))
