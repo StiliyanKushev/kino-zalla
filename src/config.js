@@ -2,9 +2,10 @@ import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 
 // this file returns an array of keys
-import apiKeys from './apiKeys.js';
+import apiKeys from './apiKeys.json';
 
-// change this to your local machine ip
+// change this to your PCs local ip if running locally
+// or your public ip if running it globally
 export const ip = '192.168.1.146';
 
 export const baseUrl = 'https://imdb-api.com/en/API';

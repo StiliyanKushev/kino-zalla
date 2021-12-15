@@ -90,6 +90,7 @@
 .recomended .pages li.selected {
     background-color: white;
     position: absolute;
+    height: 1.26vw !important;
 }
 
 .recomended .pages li {
