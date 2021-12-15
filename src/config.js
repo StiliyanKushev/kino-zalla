@@ -35,7 +35,7 @@ export const imdbFetch = async (url, calledFromSelf=false) => {
             let response = await (await fetch(mod(apiKey()))).json();
             if(response.errorMessage.length > 0){
                 console.log(response.errorMessage);
-                throw Error;
+                if(!response.errorMessage.includes('404')) throw Error;
             }
             console.log(`${apiKey()} worked!`);
             return response;
