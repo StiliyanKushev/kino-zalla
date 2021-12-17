@@ -64,7 +64,10 @@ async function search(film) {
     //     seeds: '4521',
 
     let responseData = mp4Data.map((mp4, index) => {
-        if(!mp4) return mp4;
+        if(!mp4) return null;
+        
+        // browsers don't support the hvec 265 codec
+        if(mp4.name.includes('265')) return null;
 
         return {
             magnet: magnets[index],

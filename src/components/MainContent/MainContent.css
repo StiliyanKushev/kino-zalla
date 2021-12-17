@@ -71,3 +71,30 @@ main .films-holder .row {
         padding-top: 125% !important;
     }
 }
+
+@media screen and (min-aspect-ratio: 2/1) {
+    html, body, #root {
+        height: fit-content !important;
+    }
+
+    body {
+        overflow-y: scroll;
+    }
+
+    .recomended {
+        margin-top: 1.2rem;
+        justify-content: initial !important;
+    }
+
+    .recomended h2 {
+        visibility: hidden;
+    }
+
+    .main-content {
+        display: block;
+    }
+
+    main .films-holder .banner {
+        padding-top: 145% !important;
+    }
+}

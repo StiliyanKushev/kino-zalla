@@ -34,6 +34,10 @@ streamRouter.get('/play/:magnet', async function (req, res) {
     // get mp4 file
     const mp4 = engine.files.find(f => f.name.toLocaleLowerCase().endsWith('.mp4'));
 
+    if(!mp4){
+        engine.files.map(f => console.log(f.name));
+    }
+
     // Parse Range
     const videoSize = mp4.length;
     const parts = range.replace(/bytes=/, "").split("-");
