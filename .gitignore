@@ -7,7 +7,7 @@ node_modules
 .pnp.js
 
 # file that contains my list of api keys
-/src/apiKeys.json
+apiKeys.json
 
 # testing
 /coverage

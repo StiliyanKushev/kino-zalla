@@ -109,7 +109,7 @@ function Recommendations() {
     }
 
     // setup animations after slides are rendered in the dom
-    useEffect(() => initializeSlideshow() , [slides]);
+    useEffect(() => slides.length > 0 && initializeSlideshow() , [slides]);
 
     // generate the slides after you get "recommended" in state
     useEffect(() => {
@@ -248,17 +248,6 @@ function initializeSlideshow(){
     $('.pages').on('click', (e) => {
         clearInterval(interval);
         interval = setInterval(intervalCallback, 8000);
-    });
-
-    document.addEventListener('visibilitychange', function() {
-        if(document.hidden) {
-            // tab is now inactive
-            clearInterval(interval);
-        }
-        else {
-            // tab is active again
-            interval = setInterval(intervalCallback, 8000);
-        }
     });
 }
 
