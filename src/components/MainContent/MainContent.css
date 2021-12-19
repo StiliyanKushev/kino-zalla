@@ -62,13 +62,24 @@ main .films-holder .row {
     }
 
     main .films-holder .row:nth-child(1){
-        margin-top: 3vw !important;
+        margin-top: 3vw;
     }
 }
 
 @media screen and (min-width: 1921px) and (max-height:1300px) {
     main .films-holder .banner {
         padding-top: 125% !important;
+    }
+}
+
+@media screen and (min-aspect-ratio: 2/1) and (max-height: 600px){
+    .recomended {
+        margin-top: 1.2rem;
+        justify-content: initial !important;
+    }
+
+    .recomended h2 {
+        visibility: hidden;
     }
 }
 
@@ -81,20 +92,157 @@ main .films-holder .row {
         overflow-y: scroll;
     }
 
-    .recomended {
-        margin-top: 1.2rem;
-        justify-content: initial !important;
-    }
-
-    .recomended h2 {
-        visibility: hidden;
-    }
-
     .main-content {
         display: block;
     }
 
     main .films-holder .banner {
         padding-top: 145% !important;
+    }
+}
+
+@media screen and (max-width: 800px){
+    html {
+        font-size: 3vw !important;
+    }
+
+    body {
+        margin: 1rem !important;
+        overflow-y: scroll !important;
+        height: fit-content !important;
+        padding-bottom: 1rem !important;
+    }
+
+    #root {
+        flex-direction: column !important;
+        height: fit-content !important;
+        overflow-x: hidden !important;
+    }
+
+    .side-menu {
+        width: 100% !important;
+        padding-right: 0px  !important;
+        margin-bottom: 1.5rem  !important;
+    }
+
+    .side-menu .search {
+        border-radius: 1vw  !important;
+    }
+
+    .fas.fa-search {
+        margin-left: -4vw  !important;
+    }
+
+    .recomended {
+        display: none  !important;
+    }
+
+    main form {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        margin-left: -0.6rem !important;
+        margin-right: -0.6rem !important;
+    }
+
+    .actionBtn {
+        border-radius: 1vw !important;
+        margin-right: 0.6rem !important;
+        margin-left: 0.6rem !important;
+        margin-bottom: 1.5rem !important;
+        flex: 1 0 auto !important;
+    }
+
+    .fas.fa-cog {
+        display: none !important;
+    }
+
+    .main-content {
+        height: fit-content !important;
+    }
+
+    .films-holder {
+        display: flex !important;
+        margin-left: 0rem !important;
+        margin-right: -2rem !important;
+        height: fit-content !important;
+    }
+
+    .row {
+        margin-top: 0px !important;
+        flex-direction: column !important;
+        height: fit-content !important;
+        width: 50% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    .film {
+        width: calc(100% - 2rem) !important;
+        margin-bottom: 2rem !important;
+    }
+
+    .banner {
+        border-top-left-radius: 1rem !important;
+        border-top-right-radius: 1rem !important;
+    }
+
+    .fa-star {
+        font-size: 5vw !important;
+        top: -10vw !important;
+        margin-left: 2.5vw !important;
+    }
+
+    .fa-play-circle {
+        font-size: 5.4vw !important;
+        top: -9.4vw !important;
+        right: -26.5vw !important;
+    }
+
+    .films-holder .title {
+        font-size: 3vw !important;
+        -webkit-line-clamp: 1 !important;
+        line-clamp: 1 !important;
+    }
+
+    .films-holder .duration {
+        font-size: 3vw !important;
+    }
+
+    .footer {
+        margin-top: 0rem !important;
+        flex-direction: column !important;
+    }
+
+    .page-indexer {
+        align-self: center !important;
+        margin-bottom: 2rem !important;
+        margin-top: 1rem !important;
+    }
+
+    .footer .page-indexer li:not(.dots) {
+        width: 7vw !important;
+        height: 7vw !important;
+        border-radius: 2vw !important;
+    }
+
+    .page-indexer li.dots {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .page-indexer li.dots>div {
+        width: 1vw !important;
+        height: 1vw !important;
+        background-color: #5A5A5A !important;
+        border-radius: 100% !important;
+    }
+
+    .system-information {
+        width: 100% !important;
+        font-size: 90% !important;
+        text-align: center !important;
     }
 }

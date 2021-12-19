@@ -52,7 +52,7 @@ main .films-holder .title {
     font-size: 1.1vw;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
-    -webkit-line-clamp: 2 !important;
+    -webkit-line-clamp: 2;
     text-overflow: ellipsis;
     /* height: calc(1.1vw * 1.15 * 2); */
 }
