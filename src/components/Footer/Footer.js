@@ -35,6 +35,9 @@ function Footer() {
     }
 
     const handleClick = i => {
+        // scroll to top of the window on new page select
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         setPageIndex(i);
         dispatch({ type: 'set_page', data: { index:pageArray[i - 1] - 1, from: 'footer', max: pagesCount }});
         

@@ -3,14 +3,21 @@ import './BlurOverlay.css';
 import {
     useContext,
     useEffect,
+    useRef,
+    useState,
 } from 'react';
 
+import axios from 'axios';
 import $ from 'jquery';
+import { useIdleTimer } from 'react-idle-timer';
 
+import { backendBaseUrl } from '../../config';
 import { SearchContext } from '../../contexts/Search/provider';
 
 function BlurOverlay() {
     const [ state, dispatch ] = useContext(SearchContext);
+    const [ subtitles, setSubtitles ] = useState([]);
+
     const handleClose = e => {
         // watching a movie (not a trailer)
         if(!state.popupLink.includes('youtube')){
@@ -23,34 +30,258 @@ function BlurOverlay() {
         }
         dispatch({ type: 'set_popup', data: '' })
     }
-    
+
+    const fetchSubs = async e => {
+        // fetch subs content
+        let subsContent = (await axios.get(`${backendBaseUrl}/stream/subs/TODOTODOTODO`)).data.subs;
+        
+        // generate blob url for the subs
+        const subobj = new Blob([new Uint8Array(subsContent)],{ type: "text/vtt" });
+        const url = URL.createObjectURL(subobj);
+        console.log(url);
+        return url;
+    }
+
+    // on subtitles update
+    const onCuesChange = cues => {
+        // convert all html5 video cues to one text
+        let rows = [];
+        for(let i = 0; i < cues.length; i++) rows.push(cues[i].text)
+        setSubtitles(rows.map(r => <div key={r} className="subtitles-row">{ r }</div>));
+    }
+
+    const onShow = popupLink => {
+        // animate the blur html content
+        showPopup(popupLink);
+
+        if(popupLink.includes('youtube')) return;
+        // fetch the subs for the film and create track element
+        (async () => {
+            // const blobUrl = await fetchSubs();
+            const blobUrl = 'http://localhost:3001/dummy_subs.vtt';
+            let videoElement = document.querySelector('video');
+            let track = document.createElement("track");                
+            track.kind = "subtitles";
+            track.label = "Bulgarian";
+            track.srclang = "bg";
+            track.src = blobUrl;
+            
+            // update the custom subtitles element
+            track.addEventListener('cuechange', function () {
+                let cues = this.track.activeCues; 
+                onCuesChange(cues);
+            });
+
+            // add the track element to the video tag
+            videoElement.append(track);
+
+            // hide the default track elements
+            // because I'm using custom ones I can style
+            track.mode = "hidden";
+            videoElement.textTracks[0].mode = "hidden";
+        })();
+    }
+
+    const onHide = populLink => {
+        // hide the blur html elements
+        hidePopup(state.popupLink);
+
+        // remove the subtitles
+        document.querySelectorAll('track').forEach(e => e.remove());
+    }
+
     // hide and show trailer when state changes
-    useEffect(() => state.popupLink === '' ? hidePopup(state.popupLink) : showPopup(state.popupLink), [state.popupLink]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => state.popupLink === '' ? onHide(state.popupLink) : onShow(state.popupLink), [state.popupLink]);
     
+
+    /* 
+        The following functions
+        are event handlers for 
+        the custom video player (not for the trailer preview)
+    */
+
+    // global ref for the video element
+    // that the custom controls will use
+    const _video = useRef();
+    const _loaded = useRef(false);
+
+    // this container element is fullscreen'ed
+    const _playerContainer = useRef();
+
+    // custom controls state
+    const [ isPlaying, setIsPlaying ] = useState(false);
+    const [ isFullscreen, setIsFullscreen ] = useState(false);
+    
+    // should you show video controls (only on mouse hover)
+    const [ showControls, setShowControls ] = useState(false);
+    // listen for idle and hide controls
+    useIdleTimer({
+        timeout: 5000,
+        debounce: 500,
+        onIdle: () => setShowControls(false),
+    })
+
+    // keep track of volume values
+    const [ volume, setVolume ] = useState(100);
+    const [ isMuted, setIsMuted ] = useState(false);
+    const [ lastVolume, setLastVolume ] = useState(100);
+
+    // handle default video events
+    useEffect(() => {
+        _video.current.addEventListener('play', () => _loaded.current && setIsPlaying(true));
+        _video.current.addEventListener('pause', () => setIsPlaying(false));
+        _video.current.addEventListener('loadeddata', () => {
+            // override default volume set by browser
+            _video.current.volume = volume / 100;
+
+            $('#progress').attr('max', _video.current.duration);
+            _loaded.current = true;
+            setIsPlaying(true);
+        });
+        _video.current.addEventListener('timeupdate', () => {
+            $('#progress').val(_video.current.currentTime);
+            $('#progress-bar').css('width', Math.floor((_video.current.currentTime / _video.current.duration) * 100) + '%');
+            setTimestamp(currentVideoTime());
+        });
+    },[]);
+
+    // on play/pause button press
+    const onPlay = e => {
+        setIsPlaying(!isPlaying);
+        if (_video.current.paused || _video.current.ended) _video.current.play();
+        else _video.current.pause();
+    }
+
+    // on timeline click
+    const onProgress = e => {
+        const pos = (e.pageX - e.target.getBoundingClientRect().left) / e.target.clientWidth;
+        _video.current.currentTime = pos * _video.current.duration;
+    }
+
+    // on expand/collapse button press
+    const onExpand = e => {
+        setIsFullscreen(!isFullscreen);
+        if (isFullscreen) {
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+            else if (document.webkitCancelFullScreen) document.webkitCancelFullScreen();
+            else if (document.msExitFullscreen) document.msExitFullscreen();
+         }
+         else {
+            if (_playerContainer.current.requestFullscreen) _playerContainer.current.requestFullscreen();
+            else if (_playerContainer.current.mozRequestFullScreen) _playerContainer.current.mozRequestFullScreen();
+            else if (_playerContainer.current.webkitRequestFullScreen) _playerContainer.current.webkitRequestFullScreen();
+            else if (_playerContainer.current.msRequestFullscreen) _playerContainer.current.msRequestFullscreen();
+         }
+    }
+
+    // on volume change slider value
+    const onVolumeChange = e => {
+        setVolume(e.target.value);
+        setLastVolume(e.target.value);
+        _video.current.volume = e.target.value / 100;
+
+        // if used changed volume then unmute
+        if(isMuted) setIsMuted(false);
+    }
+
+    // on volume button press
+    const onVolume = e => {
+        setIsMuted(!isMuted);
+        if(!isMuted) {
+            setVolume(0);
+            setLastVolume(volume);
+            _video.current.volume = 0;
+        }
+        else {
+            setVolume(lastVolume);
+            _video.current.volume = lastVolume / 100;
+        }
+    }
+
+    // this holds the current/duration of the movie as string
+    const [ timestamp, setTimestamp ] = useState('');
+
+    // returns the timestamp data
+    const currentVideoTime = () => {
+        try {
+            const duration = new Date(_video.current.duration * 1000).toISOString().substr(11, 8);
+            const current = new Date(_video.current.currentTime * 1000).toISOString().substr(11, 8);
+            return `${current} / ${duration}`;
+        } catch { return '00:00 / 00:00' /* video element not visible */ }
+    }
+
     return (
-        <>
-            <div className="blur">
-                <div className="trailer-container">
-                    <div>
-                        <div className="close" onClick={ handleClose }>Затвори</div>
-                        {
-                            state.popupLink.includes('youtube') ? (
-                                <iframe 
-                                title='Trailer'
-                                src={ state.popupLink } 
-                                frameBorder="0"
-                                allow="accelerometer; clipboard-write; encrypted-media;"
-                                allowFullScreen></iframe>
-                            ) : (
-                                <video crossOrigin="anonymous" controls>
+        <div className="blur">
+            <div className="trailer-container">
+                <div
+                    ref={ _playerContainer }
+                    className="blur-content-container"
+                    onMouseMove={ e => setShowControls(true) }
+                    onMouseOut={ e=> setShowControls(false) }
+                >
+                    <div className="close" onClick={ handleClose }>Затвори</div>
+                    {
+                        state.popupLink.includes('youtube') ? (
+                            <iframe 
+                            title='Trailer'
+                            src={ state.popupLink } 
+                            frameBorder="0"
+                            allow="accelerometer; clipboard-write; encrypted-media;"
+                            allowFullScreen></iframe>
+                        ) : (
+                            <>
+                                <video ref={ _video } crossOrigin="anonymous">
                                     <source src={ state.popupLink } type="video/mp4" />
                                 </video>
-                            )
-                        }
-                    </div>
+                                <div className={`subtitles ${!showControls && 'noControls'}`}>
+                                    { subtitles }
+                                </div>
+                                <div className={`video-controls ${!showControls && 'hidden'}`}>
+                                    <div className="top-row">
+                                        <div className="left">
+                                            <i 
+                                                onClick={ onPlay }
+                                                className={`play ${isPlaying ? 'fas fa-pause' : 'fas fa-play'}`}>
+                                            </i>
+                                            <span>{ timestamp }</span>
+                                        </div>
+                                        <div className="right">
+                                            <div className="volume-contrainer">
+                                                <input
+                                                    onChange={ onVolumeChange }
+                                                    type="range"
+                                                    min={1} max={100} value={ volume }
+                                                    className="volumeSlider"/>
+                                                <i 
+                                                    className={`volumeIcon ${!isMuted ? 'fas fa-volume' : 'fas fa-volume-mute'}`}
+                                                    onClick={ onVolume }
+                                                    ></i>
+                                            </div>
+                                            <i
+                                                onClick={ onExpand }
+                                                className={`${isFullscreen ? 'fas fa-compress' : 'fas fa-expand'}`}>
+                                            </i>
+                                        </div>
+                                    </div>
+                                    <div className="progress">
+                                        <progress 
+                                            onClick={ onProgress }
+                                            id="progress"
+                                            value="0"
+                                            min="0"
+                                        >
+                                            <span id="progress-bar"></span>
+                                        </progress>
+                                    </div>
+                                </div>
+                            </>
+                        )
+                    }
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

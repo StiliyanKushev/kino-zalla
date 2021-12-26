@@ -103,7 +103,7 @@ main .films-holder .row {
 
 @media screen and (max-width: 800px){
     html {
-        font-size: 3vw !important;
+        font-size: 4vw !important;
     }
 
     body {
@@ -178,38 +178,35 @@ main .films-holder .row {
     }
 
     .film {
+        -webkit-tap-highlight-color: transparent !important;
         width: calc(100% - 2rem) !important;
         margin-bottom: 2rem !important;
     }
 
-    .banner {
-        border-top-left-radius: 1rem !important;
-        border-top-right-radius: 1rem !important;
-    }
-
     .fa-star {
-        font-size: 5vw !important;
-        top: -10vw !important;
-        margin-left: 2.5vw !important;
+        font-size: 9vw !important;
+        top: -11.4vw !important;
+        margin-left: 1vw !important;
     }
 
     .fa-play-circle {
-        font-size: 5.4vw !important;
-        top: -9.4vw !important;
-        right: -26.5vw !important;
+        font-size: 9vw !important;
+        top: -11.4vw !important;
+        right: -19.5vw !important;
     }
 
     .films-holder .title {
-        font-size: 3vw !important;
+        font-size: 5vw !important;
         -webkit-line-clamp: 1 !important;
         line-clamp: 1 !important;
     }
 
     .films-holder .duration {
-        font-size: 3vw !important;
+        font-size: 5vw !important;
     }
 
     .footer {
+        -webkit-tap-highlight-color: transparent !important;
         margin-top: 0rem !important;
         flex-direction: column !important;
     }
@@ -221,8 +218,8 @@ main .films-holder .row {
     }
 
     .footer .page-indexer li:not(.dots) {
-        width: 7vw !important;
-        height: 7vw !important;
+        width: 10vw !important;
+        height: 10vw !important;
         border-radius: 2vw !important;
     }
 
@@ -238,6 +235,13 @@ main .films-holder .row {
         height: 1vw !important;
         background-color: #5A5A5A !important;
         border-radius: 100% !important;
+    }
+
+    .close {
+        position: absolute;
+        top: -15%;
+        text-shadow: 0px 3px 5px black;
+        left: 36%;
     }
 
     .system-information {

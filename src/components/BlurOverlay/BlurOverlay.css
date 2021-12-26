@@ -8,28 +8,35 @@
 }
 
 .blur {
-    opacity: 0;
     background: rgba(0, 0, 0, 0.33);
+    z-index: 9999;
     backdrop-filter: blur(5px);
     pointer-events: none;
+    opacity: 1;
+    padding-top: 0px;
     position: fixed;
-    z-index: 100;
-    top: 0%;
-    left: 0%;
-    right: 0%;
-    bottom: 0%;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .blur .trailer-container {
     position: relative;
-    padding-bottom: 56.25%;
     width: 80vw;
     display: flex;
+    height: 100%;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
+}
+
+.blur .trailer-container > div {
+    width: 100%;
+    margin-top: 75px;
 }
 
 @media screen and (max-height: 850px) {
@@ -49,19 +56,12 @@
     }
 }
 
-.blur > div {
-    margin-top: 17%;
-}
-
-.blur > div,
 .blur iframe,
 .blur video {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100%;
     height: 100%;
-    max-height: 70%;
+    max-height: 80%;
 }
 
 .blur video {
@@ -70,11 +70,183 @@
 
 .blur .close {
     font-size: 1.5rem;
-    margin-bottom: 4.5%;
+    margin-bottom: 2.5%;
     text-align: right;
     cursor: pointer;
 }
 
 .blur .close:hover {
     text-decoration: underline;
+}
+
+.subtitles {
+    z-index: 300;
+    position: absolute;
+    margin-top: -13%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    transition-property: margin-top;
+    transition-duration: 300ms;
+}
+
+.subtitles.noControls {
+    margin-top: -8%;
+}
+
+.subtitles-row {
+    color: white;
+    background: rgba(0,0,0,0.8);
+    text-align: center;
+    font-size: 1.5rem !important;
+    width: fit-content;
+    padding: .5rem 1rem;
+    border-radius: .2vw;
+}
+
+video::cue {
+    opacity: 1 !important;
+    overflow: visible !important;
+    background-color: black !important;
+}
+
+video::-webkit-media-text-track-display {
+    overflow: visible !important;
+}
+
+.video-controls {
+    background: rgb(0,0,0);
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7231267507002801) 30%, rgba(0,0,0,1) 73%);
+    position: relative;
+    margin-top: -9%;
+    padding-top: 0rem;
+    padding-bottom: 1.5rem;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: opacity;
+    transition-duration: 300ms;
+    opacity: 1;
+}
+
+.video-controls.hidden {
+    transition: opacity;
+    transition-duration: 300ms;
+    opacity: 0;
+}
+
+.video-controls .top-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1vw 1.5vw;
+    font-size: 1rem;
+}
+
+.video-controls .progress {
+    padding: 0vw 1.5vw;
+}
+
+.video-controls .progress #progress {
+    width: 100%;
+    float: none;
+    height: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.video-controls .progress #progress::-moz-progress-bar { background: rgb(255, 255, 255); }
+.video-controls .progress #progress::-webkit-progress-value { background: rgb(255, 255, 255); }
+.video-controls .progress #progress { color: rgb(255, 255, 255); }
+video::-webkit-media-controls { display:none !important; }
+.video-controls { z-index:2147483647; }
+
+.video-controls i {
+    cursor: pointer;
+}
+
+.video-controls .play {
+    margin-right: 1.2rem;
+}
+
+.blur-content-container:fullscreen .close {
+    display: none;
+}
+
+.blur-content-container:fullscreen video {
+    max-height: 100%;
+}
+
+.blur-content-container:fullscreen .video-controls {
+    margin-top: -7%;
+}
+
+.blur-content-container .volume-contrainer {
+    margin-right: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.6vw 1vw;
+    border-radius: 2vw;
+
+    transition-property: background, color;
+    transition-duration: 200ms;
+}
+
+.blur-content-container .volume-contrainer:hover {
+    background: white;
+}
+
+.blur-content-container .volume-contrainer:hover i {
+    color: black;
+}
+
+.blur-content-container .volume-contrainer:hover .volumeSlider {
+    width: 5vw !important;
+    opacity: 1 !important;
+}
+
+.blur-content-container .volume-contrainer:hover .volumeSlider::-webkit-slider-thumb {
+    border-radius: 100% !important;
+}
+
+.video-controls .volumeIcon {
+    font-size: 1.35rem;
+    margin-left: 1.4rem;
+
+    transition-property: color;
+    transition-duration: 300ms;
+}
+
+.video-controls .volumeSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(0, 0, 0, 0.6);
+    height: 0.3vw;
+    border-radius: 1vw;
+
+    width: 0px;
+    opacity: 0;
+
+    transition-property: width, opacity, background;
+    transition-duration: 300ms;
+}
+
+.video-controls .volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: .8vw !important;
+    height: .8vw !important;
+    border-radius: 100% !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    cursor: pointer !important;
+}
+
+.blur-content-container .top-row .right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

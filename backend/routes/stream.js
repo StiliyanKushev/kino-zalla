@@ -1,10 +1,11 @@
 const streamRouter = require('express').Router()
 const torrentStream = require('torrent-stream');
 const { StaticPool } = require('node-worker-threads-pool');
+const puppeteer = require('puppeteer');
 const path = require('path');
 const os = require('os');
 
-// use workers for searching and streaming
+// use workers for searching
 const staticPool = new StaticPool({
     size: os.cpus().length,
     shareEnv: true,
@@ -16,7 +17,6 @@ streamRouter.get('/film/:name', async function (req, res) {
     res.json(responseData ? { options: responseData } : { success: false })
 });
 
-// this is the file that is being streamed
 streamRouter.get('/play/:magnet', async function (req, res) {
     const magnet = decodeURIComponent(req.params.magnet);
     const range = req.headers.range;
@@ -61,6 +61,20 @@ streamRouter.get('/play/:magnet', async function (req, res) {
 
     // Stream the video chunk to the client
     videoStream.pipe(res);
+});
+
+
+// find and return movie's bulgarian subtitles
+streamRouter.get('/subs/:name', async function (req, res) {
+    // const browser = await puppeteer.launch({ headless: false });
+    // const page = await browser.newPage();
+    // await page.goto('https://subsunacs.net/search.php');
+    // await browser.close();
+    
+    const fs = require('fs');
+    const path = require('path');
+    const subsContent = fs.readFileSync(path.join(__dirname, '../dummy_subs.vtt'));
+    res.json({ subs: subsContent });
 });
 
 module.exports = streamRouter;
