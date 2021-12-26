@@ -15,8 +15,27 @@ import { backendBaseUrl } from '../../config';
 import { SearchContext } from '../../contexts/Search/provider';
 
 function BlurOverlay() {
+    const [ searchState ] = useContext(SearchContext);
     const [ state, dispatch ] = useContext(SearchContext);
     const [ subtitles, setSubtitles ] = useState([]);
+
+    // returns a blob url with the movies subtitles
+    const fetchSubs = async e => {
+        // fetch subs content
+        let subsContent = (await axios.get(`${backendBaseUrl}/stream/subs/${searchState.currentFilmName}`)).data.subs;
+
+        // generate blob url for the subs
+        const subobj = new Blob([subsContent],{ type: "text/vtt" });
+        return URL.createObjectURL(subobj);
+    }
+
+    // on subtitles update
+    const onCuesChange = cues => {
+        // convert all html5 video cues to one text
+        let rows = [];
+        for(let i = 0; i < cues.length; i++) rows.push(cues[i].text)
+        setSubtitles(rows.map(r => <div key={r} className="subtitles-row">{ r }</div>));
+    }
 
     const handleClose = e => {
         // watching a movie (not a trailer)
@@ -29,25 +48,7 @@ function BlurOverlay() {
             video.load();
         }
         dispatch({ type: 'set_popup', data: '' })
-    }
-
-    const fetchSubs = async e => {
-        // fetch subs content
-        let subsContent = (await axios.get(`${backendBaseUrl}/stream/subs/TODOTODOTODO`)).data.subs;
-        
-        // generate blob url for the subs
-        const subobj = new Blob([new Uint8Array(subsContent)],{ type: "text/vtt" });
-        const url = URL.createObjectURL(subobj);
-        console.log(url);
-        return url;
-    }
-
-    // on subtitles update
-    const onCuesChange = cues => {
-        // convert all html5 video cues to one text
-        let rows = [];
-        for(let i = 0; i < cues.length; i++) rows.push(cues[i].text)
-        setSubtitles(rows.map(r => <div key={r} className="subtitles-row">{ r }</div>));
+        dispatch({ type: 'set_title', data: '' })
     }
 
     const onShow = popupLink => {
@@ -57,15 +58,14 @@ function BlurOverlay() {
         if(popupLink.includes('youtube')) return;
         // fetch the subs for the film and create track element
         (async () => {
-            // const blobUrl = await fetchSubs();
-            const blobUrl = 'http://localhost:3001/dummy_subs.vtt';
             let videoElement = document.querySelector('video');
             let track = document.createElement("track");                
             track.kind = "subtitles";
             track.label = "Bulgarian";
             track.srclang = "bg";
-            track.src = blobUrl;
-            
+            track.src = await fetchSubs();
+            //track.src = 'http://localhost:3001/dummy_subs.vtt'
+
             // update the custom subtitles element
             track.addEventListener('cuechange', function () {
                 let cues = this.track.activeCues; 
@@ -79,12 +79,18 @@ function BlurOverlay() {
             // because I'm using custom ones I can style
             track.mode = "hidden";
             videoElement.textTracks[0].mode = "hidden";
+
+            // load the video tag
+            let source = document.querySelector('.blur video source');
+            source.src += `?r=${Date.now()}`
+            videoElement.load();
+            videoElement.play();
         })();
     }
 
-    const onHide = populLink => {
+    const onHide = popupLink => {
         // hide the blur html elements
-        hidePopup(state.popupLink);
+        hidePopup(popupLink);
 
         // remove the subtitles
         document.querySelectorAll('track').forEach(e => e.remove());
@@ -93,7 +99,6 @@ function BlurOverlay() {
     // hide and show trailer when state changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => state.popupLink === '' ? onHide(state.popupLink) : onShow(state.popupLink), [state.popupLink]);
-    
 
     /* 
         The following functions
@@ -115,6 +120,7 @@ function BlurOverlay() {
     
     // should you show video controls (only on mouse hover)
     const [ showControls, setShowControls ] = useState(false);
+
     // listen for idle and hide controls
     useIdleTimer({
         timeout: 5000,
@@ -292,14 +298,6 @@ function hidePopup(link){
 }
 
 function showPopup(link){
-    if(!link.includes('youtube')){
-        // load the video tag
-        let video = document.querySelector('.blur video');
-        let source = document.querySelector('.blur video source');
-        source.src += `?r=${Date.now()}`
-        video.load();
-        video.play();
-    }
     $('.blur').addClass('functional');
     $('.blur').css('padding-top', '30%');
     $('.blur').animate({ opacity: 1, "padding-top": "0px" }, 300);

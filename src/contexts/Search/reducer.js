@@ -51,7 +51,14 @@ export const reducer = (state, action) => {
         case "set_popup": {
             return {
                 ...state,
-                popupLink: action.data
+                popupLink: action.data,
+            }
+        }
+
+        case "set_title": {
+            return {
+                ...state,
+                currentFilmName: action.data
             }
         }
 
@@ -117,6 +124,7 @@ export const initialState = {
     topSaved: [],
     inTheatersSaved: [],
     recomended: [],
+    currentFilmName: '',
     error: '',
     pageIndex: 0,
     maxPages: 0,

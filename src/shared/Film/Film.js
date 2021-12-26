@@ -41,7 +41,6 @@ function Film(props) {
     const background = `linear-gradient(180deg, rgba(0, 0, 0, 0) 66.15%, #000000 100%), url(${highResImage()})`;
 
     const isEmpty = () => Object.keys(props.data).length === 0;
-
     
     const handleClick = e => {
         if(isEmpty()) return;
@@ -100,6 +99,10 @@ function Film(props) {
                     progress: undefined,
                 });
                 dispatchStream({ type: 'show_options', data: options })
+                
+                // save the title for later
+                // when the player will look for subtitles
+                dispatch({ type: 'set_title', data: props.data.title })
             }
             else {
                 toast.error('Could not find torrent.', {
