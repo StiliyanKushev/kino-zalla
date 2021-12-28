@@ -11,6 +11,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "decompress-zip": "^0.3.3",
+    "encoding": "^0.1.13",
     "express": "^4.17.1",
     "install": "^0.13.0",
     "mongoose": "^6.1.1",
@@ -18,6 +19,7 @@
     "node-worker-threads-pool": "^1.5.1",
     "nodemon": "^2.0.15",
     "npm": "^8.3.0",
+    "playwright": "^1.17.1",
     "pm2": "^5.1.2",
     "puppeteer": "^13.0.1",
     "socket.io": "^4.4.0",
@@ -27,7 +29,6 @@
     "unrar-promise": "^2.0.1",
     "uuid": "^8.3.2",
     "uuid-v4": "^0.1.0",
-    "uuidv4": "^6.2.12",
-    "windows-1251": "^3.0.4"
+    "uuidv4": "^6.2.12"
   }
 }

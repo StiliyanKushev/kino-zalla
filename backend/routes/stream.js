@@ -4,7 +4,8 @@ const { StaticPool } = require('node-worker-threads-pool');
 const { convert } = require('subtitle-converter');
 const DecompressZip = require('decompress-zip');
 const { unrar } = require('unrar-promise');
-const puppeteer = require('puppeteer');
+const playwright = require('playwright');
+const encoding = require("encoding");
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -71,8 +72,11 @@ streamRouter.get('/play/:magnet', async function (req, res) {
 // find and return movie's bulgarian subtitles
 streamRouter.get('/subs/:name', async function (req, res) {
     const film = req.params.name;
-    const browser = await puppeteer.launch({ headless: true });
-    const page = await browser.newPage();
+    console.log(`Search subtitles for ${film}`)
+
+    const browser = await playwright.chromium.launch({ headless: false });
+    const context = await browser.newContext({ acceptDownloads: true });
+    const page = await context.newPage();
     await page.goto('https://subsunacs.net/search.php');
 
     // trigger search for movie
@@ -91,7 +95,8 @@ streamRouter.get('/subs/:name', async function (req, res) {
     if (!fs.existsSync(downloadPath)) fs.mkdirSync(downloadPath);
 
     // set the default download path
-    await page._client.send('Page.setDownloadBehavior', {
+    const client = await context.newCDPSession(page);
+    await client.send('Page.setDownloadBehavior', {
         behavior: 'allow',
         downloadPath,
     });
@@ -120,11 +125,12 @@ streamRouter.get('/subs/:name', async function (req, res) {
 
     // begin extracting the zip
     if(archivePath.endsWith('.zip')){
-        const unzipper = new DecompressZip(archivePath);
-        unzipper.extract({ path: downloadPath });
-
         // wait for extraction to complete
-        await new Promise(resolve => () => unzipper.on('extract', () => resolve()));
+        await new Promise(resolve => {
+            const unzipper = new DecompressZip(archivePath);
+            unzipper.on('extract', () => resolve());
+            unzipper.extract({ path: downloadPath });
+        });
     }
     // the other variant is rar
     else await unrar(archivePath, downloadPath);
@@ -132,20 +138,19 @@ streamRouter.get('/subs/:name', async function (req, res) {
     // get the subtitles file
     const subsPath = path.join(downloadPath,fs.readdirSync(downloadPath)
     .find(f => !(f.endsWith('.rar') || f.endsWith('.zip') || f.endsWith('.txt'))));    
-    const subsContent = fs.readFileSync(subsPath, { encoding: 'utf-8' });
+    const subsContent = fs.readFileSync(subsPath, { encoding: 'binary' });
 
-    // convert it to vtt (supported by browsers)
+    // convert to vtt standard (supported by browsers)
     const { subtitle } = convert(subsContent, '.vtt', { removeTextFormatting: true });
 
-    // decode the text to cyrillic
-    const final = await (await import('windows-1251')).decode(subtitle);
-    console.log(final);
+    // convert the cyrillic to utf-8
+    const converted = encoding.convert(subtitle, 'UTF-8', 'win1251').toString();
 
     // remove the files at the end
     fs.rmSync(downloadPath, { recursive: true });
 
     // return the subs
-    res.json({ subs: final });
+    res.json({ subs: converted });
 });
 
 module.exports = streamRouter;

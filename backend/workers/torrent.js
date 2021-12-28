@@ -34,29 +34,33 @@ async function search(film) {
     engines.map(e => e && e.destroy())
 
     let mp4Data = await new Promise((resolve, reject) => {
-        let foundMp4 = false;
         let list = [];
         for(let engine of engines){
+            // if engine failed to load fill index with undefined
             if(!engine) {
-                list.push(undefined)
+                list.push(undefined);
                 continue;
             }
-            for(let file of engine.files){
-                if(file.name.toLocaleLowerCase().endsWith('.mp4')){
-                    list.push(file);
-                    foundMp4 = true;
-                }
+
+            // get all mp4 files in that torrent
+            let engineVideos = [];
+            for(let file of engine.files)
+                if(file.name.toLocaleLowerCase().endsWith('.mp4')) engineVideos.push(file);
+
+            // if no videos in torrent then fill index with undefined
+            if(engineVideos.length === 0) list.push(undefined);
+            else {
+                // push the biggest mp4 file
+                const biggest = engineVideos.reduce((c, p) => c.length > p.length ? c : p);
+                list.push(biggest);
             }
         }
-
-        // no mp4 files found
-        if(!foundMp4) resolve(undefined);
 
         // resolve all mp4 files
         resolve(list);
     });
 
-    if(mp4Data === undefined || mp4Data.length === 0) return undefined;
+    if(mp4Data.length === 0) return undefined;
 
     //     magnet: 'magnet:?...',
     //     name: 'Name.of.biggest.file.mp4',
@@ -84,5 +88,6 @@ async function search(film) {
     responseData = responseData.filter(e => e != null)
     if(responseData.length > 8) responseData = responseData.splice(0, 8);
 
+    if(responseData.length === 0) return undefined;
     return responseData;
 }
