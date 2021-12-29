@@ -73,7 +73,7 @@ streamRouter.get('/subs/:name', async function (req, res) {
     const film = req.params.name.replaceAll(/(\W)/gm, ' ');
     console.log(`Search subtitles for ${film}`)
 
-    const browser = await playwright.chromium.launch({ headless: false });
+    const browser = await playwright.chromium.launch({ headless: true });
     const context = await browser.newContext({ acceptDownloads: true });
     const page = await context.newPage();
     await page.goto('https://subsunacs.net/search.php');

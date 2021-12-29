@@ -73,6 +73,10 @@ function Recommendations() {
                     progress: undefined,
                 });
                 dispatchStream({ type: 'show_options', data: options })
+
+                // save the title for later
+                // when the player will look for subtitles
+                dispatch({ type: 'set_title', data: getCurrentTitle() })
             }
             else {
                 toast.error('Could not find torrent.', {
@@ -147,10 +151,10 @@ function Recommendations() {
                 <section className="preview-section dummy">
                     <div className="banner-image"></div>
                     <div className="bottom-holder">
-                         <img alt="" className="preview-image" src={offlineBanner} />
+                         <img alt="" className="preview-image" src={ offlineBanner } />
                         <div>
-                            <p className="title">Spider-Man: No Way Home</p>
-                            <p className="duration">2 ч 28 мин</p>
+                            <p className="title">...</p>
+                            <p className="duration">...</p>
                         </div>
                     </div>
                 </section>
