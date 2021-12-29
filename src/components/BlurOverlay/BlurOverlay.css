@@ -69,7 +69,7 @@
 }
 
 .blur .close {
-    font-size: 1.5rem;
+    font-size: 35px;
     margin-bottom: 2.5%;
     text-align: right;
     cursor: pointer;
@@ -172,6 +172,10 @@ video::-webkit-media-controls { display:none !important; }
     margin-right: 1.2rem;
 }
 
+.blur-content-container {
+    height: 100%;
+}
+
 .blur-content-container:fullscreen .close {
     display: none;
 }
@@ -211,6 +215,12 @@ video::-webkit-media-controls { display:none !important; }
 
 .blur-content-container .volume-contrainer:hover .volumeSlider::-webkit-slider-thumb {
     border-radius: 100% !important;
+}
+
+.video-controls.disabled {
+    color: gray;
+    user-select: none;
+    pointer-events: none;
 }
 
 .video-controls .volumeIcon {

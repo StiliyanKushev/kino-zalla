@@ -68,10 +68,9 @@ streamRouter.get('/play/:magnet', async function (req, res) {
     videoStream.pipe(res);
 });
 
-
 // find and return movie's bulgarian subtitles
 streamRouter.get('/subs/:name', async function (req, res) {
-    const film = req.params.name;
+    const film = req.params.name.replaceAll(/(\W)/gm, ' ');
     console.log(`Search subtitles for ${film}`)
 
     const browser = await playwright.chromium.launch({ headless: false });
@@ -102,11 +101,30 @@ streamRouter.get('/subs/:name', async function (req, res) {
     });
 
     // download one of the subtitle files
-    await page.evaluate(async (filmName) => {
+    const found = await page.evaluate(async (filmName) => {
         let allLinks = document.querySelectorAll('tbody a.tooltip');
-        let anchor = Array.from(allLinks).find(a => a.textContent.trim() === filmName);
+        if(!allLinks.length) return false;
+
+        // smart way to compare if the title is the same
+        // disregards the special characters and extra white space
+        const compare = entry => {
+            const real_s = entry.split(/\W/).filter(String).map(s => s.toLowerCase())
+            const mine_s = filmName.split(/\W/).filter(String).map(s => s.toLowerCase())
+            return real_s.length === mine_s.length && real_s.every((value, index) => value === mine_s[index]);
+        }
+
+        let anchor = Array.from(allLinks).find(a => compare(a.textContent));
+        if(!anchor) return false;
+
         anchor.click();
+        return true;
     }, film);
+
+    // did not find any subtitles
+    if(!found) {
+        browser.close();
+        return res.json({ subs: '' });
+    }
 
     // wait for the file to be downloaded
     const waitFile = async folderPath => {
@@ -115,7 +133,15 @@ streamRouter.get('/subs/:name', async function (req, res) {
             if (fs.readdirSync(folderPath).length === 0) {
                 await delay(1000);
                 resolve(await waitFile(folderPath));
-            } else resolve(path.join(folderPath, fs.readdirSync(folderPath)[0]));
+            } else {
+                const filePath = path.join(folderPath, fs.readdirSync(folderPath)[0]);
+                if(filePath.endsWith('.crdownload')){ // file is still downloading
+                    await delay(1000);
+                    resolve(await waitFile(folderPath));
+                } else {
+                    resolve(filePath);
+                }
+            };
         })
     }
     const archivePath = await waitFile(downloadPath);

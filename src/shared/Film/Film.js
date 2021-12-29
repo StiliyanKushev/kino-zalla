@@ -44,7 +44,7 @@ function Film(props) {
     
     const handleClick = e => {
         if(isEmpty()) return;
-        
+        console.log(`${baseUrl}/YouTubeTrailer/$KEY/${props.data.imdbId || props.data.id}`);
         imdbFetch(`${baseUrl}/YouTubeTrailer/$KEY/${props.data.imdbId || props.data.id}`).then(res => {
             dispatch({ type: 'set_popup', data: `https://www.youtube.com/embed/${res.videoId}` })
         }).catch(() => {});
@@ -81,7 +81,7 @@ function Film(props) {
             onClose: () => (didCancel = true) && cancelToken.cancel()
         });
 
-        axios.get(`${backendBaseUrl}/stream/film/${props.data.title}`, {
+        axios.get(`${backendBaseUrl}/stream/film/${props.data.title + " " + props.data.year}`, {
             cancelToken: cancelToken.token
         }).then(res => {
             toast.dismiss();

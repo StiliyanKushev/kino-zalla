@@ -29,9 +29,15 @@ function SearchBar() {
         // make the api call
         imdbFetch(`${baseUrl}/SearchMovie/$KEY/${value}`).then(res => {
             if(res.errorMessage.length > 0) toastError(res.errorMessage);
-            dispatch({ type: 'search_end', data: res.results, error: res.errorMessage })
+            const final = extractYears(res.results);
+            dispatch({ type: 'search_end', data: final, error: res.errorMessage })
         }).catch(() => {})
     }
+
+    // by default the api used returns
+    // the movie's year in the description
+    // instead of a seperate object property
+    const extractYears = results => results.map(r => { return { ...r, year: r.description.match(/([0-9]+)/)[0]} })
 
     return (
         <form className="search" onSubmit={ handleSearch }>
