@@ -133,6 +133,9 @@ function BlurOverlay() {
     const [ showControls, setShowControls ] = useState(false);
     const [ controlsEnabled, setControlsEnabled ] = useState(false);
 
+    // subtitles related controls
+    const [ showSubtitles, setShowSubtitles ] = useState(true);
+
     // listen for idle and hide controls
     useIdleTimer({
         timeout: 5000,
@@ -181,6 +184,22 @@ function BlurOverlay() {
     const onProgress = e => {
         const pos = (e.pageX - e.target.getBoundingClientRect().left) / e.target.clientWidth;
         _video.current.currentTime = pos * _video.current.duration;
+    }
+
+    // sync offset the subtitles
+    const subsOffset = offset => {
+        Array.from(_video.current.textTracks).forEach((track) => {
+            if(track.cues)
+            Array.from(track.cues).forEach((cue) => {
+                cue.startTime += offset;
+                cue.endTime += offset;
+            });
+        });
+    }
+
+    // show hide subtitles
+    const onSubs = e => {
+        setShowSubtitles(!showSubtitles);
     }
 
     // on expand/collapse button press
@@ -259,7 +278,7 @@ function BlurOverlay() {
                                 <video ref={ _video } crossOrigin="anonymous">
                                     <source src={ state.popupLink } type="video/mp4" />
                                 </video>
-                                <div className={`subtitles ${!showControls && 'noControls'}`}>
+                                <div className={`subtitles ${!showSubtitles && 'noShow'} ${!showControls && 'noControls'}`}>
                                     { subtitles }
                                 </div>
                                 <div className={`video-controls ${!showControls && 'hidden'} ${!controlsEnabled && 'disabled'}`}>
@@ -269,7 +288,7 @@ function BlurOverlay() {
                                                 onClick={ onPlay }
                                                 className={`play ${isPlaying ? 'fas fa-pause' : 'fas fa-play'}`}>
                                             </i>
-                                            <span>{ timestamp }</span>
+                                            <span className='text-timestamp'>{ timestamp }</span>
                                         </div>
                                         <div className="right">
                                             <div className="volume-contrainer">
@@ -283,6 +302,18 @@ function BlurOverlay() {
                                                     onClick={ onVolume }
                                                     ></i>
                                             </div>
+                                            <i
+                                                onClick={ () => subsOffset(-0.5) }
+                                                className={`${showSubtitles ? 'fas' : 'far'} fa-caret-square-left`}>
+                                            </i>
+                                            <i 
+                                                onClick={ onSubs }
+                                                className={`${showSubtitles ? 'fas' : 'far'} subsBtn fa-closed-captioning`}>
+                                            </i>
+                                            <i
+                                                onClick={ () => subsOffset(0.5) }
+                                                className={`${showSubtitles ? 'fas' : 'far'} fa-caret-square-right`}>
+                                            </i>
                                             <i
                                                 onClick={ onExpand }
                                                 className={`${isFullscreen ? 'fas fa-compress' : 'fas fa-expand'}`}>

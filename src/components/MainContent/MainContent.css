@@ -53,10 +53,6 @@ main .films-holder .row {
 }
 
 @media screen and (max-width: 1920px) and (max-height:960px) {
-    /* main .films-holder .banner {
-        padding-top: 140% !important;
-    } */
-
     main .films-holder .row:nth-child(2) {
         margin-top: .2vw !important;
     }
@@ -238,15 +234,101 @@ main .films-holder .row {
     }
 
     .close {
-        position: absolute;
-        top: -15%;
+        text-align: center !important;
         text-shadow: 0px 3px 5px black;
-        left: 36%;
+        margin-bottom: 2rem !important;
+    }
+
+    .blur-content-contrainer {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex-direction: column !important;
+        margin: 0px !important;
     }
 
     .system-information {
         width: 100% !important;
         font-size: 90% !important;
         text-align: center !important;
+    }
+
+    .video-controls {
+        margin-top: -24% !important;
+        padding: 0rem 1rem !important;
+    }
+
+    .subtitles.noControls {
+        margin-top: -30% !important;
+    }
+
+    .subtitles {
+        margin-top: -50% !important;
+    }
+
+    .blur-content-container .volume-contrainer:hover {
+        background: unset !important;
+    }
+    
+    .blur-content-container .volume-contrainer:hover i {
+        color: unset !important;
+    }
+    
+    .blur-content-container .volume-contrainer:hover .volumeSlider {
+        display: none;
+        width: unset !important;
+        opacity: unset !important;
+    }
+    
+    .blur-content-container .volume-contrainer:hover .volumeSlider::-webkit-slider-thumb {
+        border-radius: unset !important;
+    }
+
+    .text-timestamp {
+        display: none;
+    }
+}
+
+@media screen and (max-height: 800px) and (orientation: landscape) {
+    .close {
+        text-align: right !important;
+        text-shadow: 0px 3px 5px black;
+        margin-bottom: 2vw !important;
+    }
+
+    .blur-content-container{
+        margin-top: 2vw !important;
+    }
+
+    .video-controls {
+        margin-top: -28vh !important;
+        padding-bottom: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
+
+    .top-row {
+        font-size: .6rem !important;
+    }
+
+    .volumeIcon {
+        font-size: .75rem !important;
+    }
+
+    .subtitles.noControls {
+        margin-top: -15% !important;
+    }
+
+    .subtitles {
+        margin-top: -25% !important;
+    }
+
+    .subtitles-row {
+        font-size: .6rem !important;
+        border-radius: .2rem !important;
+    }
+
+    .text-timestamp {
+        display: initial !important;
     }
 }

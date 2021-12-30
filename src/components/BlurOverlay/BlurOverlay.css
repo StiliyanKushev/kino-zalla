@@ -39,23 +39,6 @@
     margin-top: 75px;
 }
 
-@media screen and (max-height: 850px) {
-    .blur > div {
-        margin-top: 25% !important;
-    }
-
-    .blur > div,
-    .blur iframe,
-    .blur video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        max-height: 60% !important;
-    }
-}
-
 .blur iframe,
 .blur video {
     position: relative;
@@ -89,12 +72,16 @@
     flex-direction: column;
     align-items: center;
 
-    transition-property: margin-top;
+    transition-property: margin-top, opacity;
     transition-duration: 300ms;
 }
 
 .subtitles.noControls {
     margin-top: -8%;
+}
+
+.subtitles.noShow {
+    opacity: 0 !important;
 }
 
 .subtitles-row {
@@ -259,4 +246,18 @@ video::-webkit-media-controls { display:none !important; }
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.subsBtn {
+    margin: 0rem .5rem;
+}
+
+.fa-caret-square-right {
+    margin-right: 2.5rem;
+}
+
+.fa-caret-square-right.far,
+.fa-caret-square-left.far {
+    user-select: none;
+    pointer-events: none;
 }

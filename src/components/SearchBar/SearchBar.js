@@ -31,7 +31,7 @@ function SearchBar() {
             if(res.errorMessage.length > 0) toastError(res.errorMessage);
             const final = extractYears(res.results);
             dispatch({ type: 'search_end', data: final, error: res.errorMessage })
-        }).catch(() => {})
+        }).catch(() => dispatch({ type: 'search_end', data: [], error: 'No Results' }))
     }
 
     // by default the api used returns

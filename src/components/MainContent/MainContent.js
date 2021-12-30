@@ -88,16 +88,20 @@ function MainContent() {
 
     // load page data
     useEffect(() => {
-        if(!state.data[(state.pageIndex * pageFilmsCount)]) return; // data hasn't loaded yet
+        // data hasn't loaded yet
+        if(!state.data[(state.pageIndex * pageFilmsCount)] && state.searching) return;
         
+        // if no results
+        if(!state.data.length) return setPageItems([{}]);
+
         let items = [];
         for(let i = 0; i < pageFilmsCount; i++)
         items.push(state.data[(state.pageIndex * pageFilmsCount) + i]);
-        
+
         // add local data to imdb
         if(!state.local)
         (async items => setPageItems(await appendLocalServerData(items)))(items);
-    }, [state.data, state.pageIndex, dispatch, state.local])
+    }, [state.data, state.pageIndex, dispatch, state.local, state.searching])
 
 
     // dynamically generate the rows based on page index
