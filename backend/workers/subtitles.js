@@ -9,8 +9,8 @@ const fs = require('fs');
 
 (async() => {
     console.log(`thread ${threadId} is up and running.`);
-    parentPort.on('message', async (filmName) => {
-        parentPort.postMessage(await search(filmName));
+    parentPort.on('message', async (name) => {
+        parentPort.postMessage(await search(name));
     });
 })();
 
@@ -21,6 +21,7 @@ async function search(filmName) {
     const browser = await playwright.chromium.launch({ headless: true, args: ['--disable-dev-shm-usage'] });
     const context = await browser.newContext({ acceptDownloads: true });
     const page = await context.newPage();
+    await page.setDefaultNavigationTimeout(0);
     await page.goto('https://subsunacs.net/search.php');
 
     // trigger search for movie
@@ -120,6 +121,6 @@ async function search(filmName) {
     // remove the files at the end
     fs.rmSync(downloadPath, { recursive: true });
 
-    // return the subs
+    // return the subtitles
     return converted;
 }

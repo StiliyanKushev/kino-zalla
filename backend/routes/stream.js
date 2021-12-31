@@ -18,11 +18,19 @@ const subtitlesSearch = new StaticPool({
     task: path.join(process.cwd(), './workers/subtitles.js'),
 });
 
+// find and return top suggested magnet links for a movie
 streamRouter.get('/film/:name', async function (req, res) {
     const responseData = await torrentSearch.exec(req.params.name);
     res.json(responseData ? { options: responseData } : { success: false });
 });
 
+// find and return movie's bulgarian subtitles
+streamRouter.get('/subs/:name/', async function (req, res) {
+    const responseData = await subtitlesSearch.exec(req.params.name);
+    res.json({ subs: responseData });
+});
+
+// stream a magnet as a video to the user
 streamRouter.get('/play/:magnet', async function (req, res) {
     const magnet = decodeURIComponent(req.params.magnet);
     const range = req.headers.range;
@@ -39,10 +47,6 @@ streamRouter.get('/play/:magnet', async function (req, res) {
 
     // get mp4 file
     const mp4 = engine.files.find(f => f.name.toLocaleLowerCase().endsWith('.mp4'));
-
-    if(!mp4){
-        engine.files.map(f => console.log(f.name));
-    }
 
     // Parse Range
     const videoSize = mp4.length;
@@ -67,12 +71,6 @@ streamRouter.get('/play/:magnet', async function (req, res) {
 
     // Stream the video chunk to the client
     videoStream.pipe(res);
-});
-
-// find and return movie's bulgarian subtitles
-streamRouter.get('/subs/:name', async function (req, res) {
-    const responseData = await subtitlesSearch.exec(req.params.name);
-    res.json({ subs: responseData });
 });
 
 module.exports = streamRouter;

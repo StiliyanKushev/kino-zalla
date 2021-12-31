@@ -12,7 +12,7 @@ import { StreamContext } from '../../contexts/Stream/provider';
 
 function StreamOptions() {
     const [ state, dispatch ] = useContext(StreamContext);
-    const [, dispatchFilm ] = useContext(SearchContext);
+    const [, dispatchSearch ] = useContext(SearchContext);
     const [ options, setOptions ] = useState([]);
     
     const handleClose = e => {
@@ -21,7 +21,7 @@ function StreamOptions() {
 
     const handleClick = f => {
         handleClose();
-        dispatchFilm({ type: 'set_popup', data: `${backendBaseUrl}/stream/play/${encodeURIComponent(f.magnet)}` })
+        dispatchSearch({ type: 'set_popup', data: `${backendBaseUrl}/stream/play/${encodeURIComponent(f.magnet)}` })
     }
 
     useEffect(() => {

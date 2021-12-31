@@ -40,7 +40,7 @@ export const imdbFetch = async (url, calledFromSelf=false) => {
             }
             console.log(`${apiKey()} worked!`);
             return response;
-        } catch { 
+        } catch {
             keyStatus[apiKey()] = false;
             console.log(`${apiKey()} is not working...`);
             nextKey()
