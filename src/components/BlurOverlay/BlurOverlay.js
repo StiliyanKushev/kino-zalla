@@ -299,11 +299,11 @@ function BlurOverlay() {
                                                     className="volumeSlider"/>
                                                 <i 
                                                     className={`volumeIcon ${!isMuted ? 'fas fa-volume' : 'fas fa-volume-mute'}`}
-                                                    onClick={ onVolume }
-                                                    ></i>
+                                                    onClick={ onVolume }>
+                                                </i>
                                             </div>
                                             <i
-                                                onClick={ () => subsOffset(-0.5) }
+                                                onClick={ () => subsOffset(0.5) }
                                                 className={`${showSubtitles ? 'fas' : 'far'} fa-caret-square-left`}>
                                             </i>
                                             <i 
@@ -311,7 +311,7 @@ function BlurOverlay() {
                                                 className={`${showSubtitles ? 'fas' : 'far'} subsBtn fa-closed-captioning`}>
                                             </i>
                                             <i
-                                                onClick={ () => subsOffset(0.5) }
+                                                onClick={ () => subsOffset(-0.5) }
                                                 className={`${showSubtitles ? 'fas' : 'far'} fa-caret-square-right`}>
                                             </i>
                                             <i

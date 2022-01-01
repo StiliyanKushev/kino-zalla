@@ -1,0 +1,36 @@
+public class ErrMsg
+{
+    public static string Invalid_Api_Key => "Invalid API Key";
+    public static string User_Email_Not_Confirmed => "Email not confirmed";
+    public static string User_Suspended => "Your account has been suspended.";
+    public static string Invalid_Id => "Invalid Id";
+    public static string Invalid_Season_Number => "Invalid SeasonNumber";
+    public static string Season_Number_Not_Valid_For_Movie => "SeasonNumber not valid for Movie";
+    public static string Season_Number_Grather(string existingSeasons) => $"SeasonNumber grather than existing seasons ({existingSeasons})";
+    public static string Server_Busy => "Server busy";
+    public static string Exception => "Exception";
+    public static string Your_Api_Key_Has_Expired => "Your API Key has expired";
+    public static string Maximum_Usage(int current, int total) => $"Maximum usage ({current} of {total} per day)";
+ 
+    public static string Not_Founded_404 => "404 Not Founded Error";
+ 
+    public static string VideoGame_Not_Valid => "VideoGame not valid";
+ 
+    public static string Invalid_Request(string pattern) => $"Invalid request. Using correct pattern: ...{pattern}";
+ 
+    public static string TvEpisode_Type_Is_Not_Valid => "TvEpisode type is NOT valid";
+    public static string MusicVideo_Type_Is_Not_Valid => "MusicVideo type is NOT valid";
+ 
+    public static string Wikipedia_Not_Founded_In_Lang(string lang) => $"Wikipedia not founded in '{lang}' language";
+    public static string Bad_Request => "Bad Request";
+    public static string Adult => "Adult not valid";
+    public static string Year_Empty => "Year is empty";
+ 
+    public static string Copyright_Not_Valid => "Deleted for copyright";
+ 
+    public static string YouTube_Invalid_VideoId => "Invalid YouTube Video Id";
+ 
+    public static string List_Is_Empty => "List is empty";
+ 
+    public static string AdvancedSearchWithoutFilter => "It is mandatory to enter at least one filter.";
+}

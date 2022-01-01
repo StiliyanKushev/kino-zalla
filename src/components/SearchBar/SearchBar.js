@@ -37,7 +37,10 @@ function SearchBar() {
     // by default the api used returns
     // the movie's year in the description
     // instead of a seperate object property
-    const extractYears = results => results.map(r => { return { ...r, year: r.description.match(/([0-9]+)/)[0]} })
+    const extractYears = results => results.map(r => { 
+        const match = r.description.match(/([0-9]+)/);
+        return { ...r, year: match ? match[0] : null } 
+    })
 
     return (
         <form className="search" onSubmit={ handleSearch }>
