@@ -21,6 +21,7 @@
 - Express
 - MongoDB
 - Worker Threads
+- Playwright
 
 ## What this offers
 
