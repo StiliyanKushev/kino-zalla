@@ -60,6 +60,11 @@ cd backend && npm i && cd ../ && npm i
 ]
 ```
 
+### Edit /home-cinema-provider/src/config.js (line 9)
+```
+export const ip = 'YOUR LOCAL MACHINE IP OR VPS IP';
+```
+
 ### Start the project
 ```
 npm run start
