@@ -49,7 +49,7 @@ cd home-cinema-provider
 cd backend && npm i && cd ../ && npm i
 ```
 
-### Edit /home-cinema-provider/src/apiKeys.json
+### Edit /kino-zalla/src/apiKeys.json
 ```
 [
 	"k_o5lh****",
@@ -61,7 +61,7 @@ cd backend && npm i && cd ../ && npm i
 ]
 ```
 
-### Edit /home-cinema-provider/src/config.js (line 9)
+### Edit /kino-zalla/src/config.js (line 9)
 ```
 export const ip = 'YOUR LOCAL MACHINE IP OR VPS IP';
 ```
