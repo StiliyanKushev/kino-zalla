@@ -32,6 +32,7 @@
 - [x] Up-to-date IMDb support.
 - [x] Trailers of movies included.
 - [x] Can save your favorite movies.
+- [x] Automatically streams Bulgarian subtitles for every movie.
 
 ## Prerequisites
 - NodeJS & NPM Installed.
