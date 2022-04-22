@@ -44,7 +44,7 @@
 
 ### Setup the project
 ```
-git clone https://github.com/StiliyanKushev/home-cinema-provider.git
+git clone https://github.com/StiliyanKushev/kino-zalla.git
 cd home-cinema-provider
 cd backend && npm i && cd ../ && npm i
 ```
