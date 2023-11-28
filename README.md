@@ -72,6 +72,6 @@ npm run start
 ```
 #### Open a new terminal window
 ```
-cd home-cinema-provider/backend
+cd kino-zalla/backend
 npm start
 ```
